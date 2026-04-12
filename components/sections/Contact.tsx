@@ -5,71 +5,73 @@ import { siteConfig } from "@/data/portfolio-data";
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-32 md:py-48 px-6 md:px-12 lg:px-16">
-      <div className="max-w-7xl mx-auto">
-        <motion.p
-          className="text-fg-muted text-xs tracking-[0.3em] uppercase mb-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          Get in touch
-        </motion.p>
+    <section id="contact" className="py-24 md:py-32 px-6 md:px-10 relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Massive CTA */}
-        <motion.a
-          href={`mailto:${siteConfig.email}`}
-          className="block font-display text-massive font-bold text-fg hover:text-accent transition-colors duration-500 mb-16"
-          data-cursor="pointer"
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <motion.div className="flex items-center justify-center gap-3 mb-8"
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+          <div className="w-2 h-2 bg-accent rounded-full" />
+          <span className="text-accent text-sm font-semibold tracking-wider uppercase">Contact</span>
+        </motion.div>
+
+        <motion.h2
+          className="font-display text-4xl md:text-6xl font-bold text-fg mb-6"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          Let&apos;s <span className="font-serif font-normal">talk</span>.
-        </motion.a>
+          Let&apos;s work <span className="gradient-text">together</span>
+        </motion.h2>
 
-        {/* Contact details */}
-        <motion.div
-          className="grid md:grid-cols-3 gap-8 border-t border-border pt-10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+        <motion.p
+          className="text-fg-secondary text-lg max-w-xl mx-auto mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
         >
-          <div>
-            <p className="text-fg-muted text-xs tracking-wider uppercase mb-2">Email</p>
-            <a href={`mailto:${siteConfig.email}`} className="text-fg text-sm hover:text-accent transition-colors" data-cursor="pointer">
-              {siteConfig.email}
+          I&apos;m always open to new projects, collaborations, or just a conversation about marketing, AI and technology.
+        </motion.p>
+
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+        >
+          <a href={`mailto:${siteConfig.email}`}
+            className="px-8 py-4 bg-accent text-white font-semibold rounded-2xl hover:shadow-lg hover:shadow-accent/25 hover:-translate-y-0.5 transition-all duration-300">
+            {siteConfig.email}
+          </a>
+          <a href={`tel:${siteConfig.phone}`}
+            className="px-8 py-4 bg-white text-fg font-semibold rounded-2xl border border-border hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all duration-300 shadow-sm">
+            {siteConfig.phone}
+          </a>
+        </motion.div>
+
+        {/* Social links */}
+        <motion.div
+          className="flex justify-center gap-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+        >
+          {[
+            { name: "LinkedIn", href: siteConfig.social.linkedin },
+            { name: "GitHub", href: siteConfig.social.github },
+            { name: "WhatsApp", href: siteConfig.social.whatsapp },
+          ].map((l) => (
+            <a key={l.name} href={l.href} target="_blank" rel="noopener noreferrer"
+              className="px-5 py-2.5 bg-bg-card rounded-xl border border-border text-fg-secondary text-sm hover:text-accent hover:border-accent transition-all duration-300">
+              {l.name}
             </a>
-          </div>
-          <div>
-            <p className="text-fg-muted text-xs tracking-wider uppercase mb-2">Phone</p>
-            <a href={`tel:${siteConfig.phone}`} className="text-fg text-sm hover:text-accent transition-colors" data-cursor="pointer">
-              {siteConfig.phone}
-            </a>
-          </div>
-          <div>
-            <p className="text-fg-muted text-xs tracking-wider uppercase mb-2">Socials</p>
-            <div className="flex gap-4">
-              {[
-                { name: "LinkedIn", href: siteConfig.social.linkedin },
-                { name: "GitHub", href: siteConfig.social.github },
-                { name: "WhatsApp", href: siteConfig.social.whatsapp },
-              ].map((l) => (
-                <a
-                  key={l.name}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-fg-secondary text-sm hover:text-accent transition-colors"
-                  data-cursor="pointer"
-                >
-                  {l.name}
-                </a>
-              ))}
-            </div>
-          </div>
+          ))}
         </motion.div>
       </div>
     </section>

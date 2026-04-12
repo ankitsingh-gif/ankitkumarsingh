@@ -12,12 +12,12 @@ export default function Preloader() {
       setCount((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setLoading(false), 500);
+          setTimeout(() => setLoading(false), 400);
           return 100;
         }
-        return Math.min(prev + (prev < 70 ? 3 : 6), 100);
+        return Math.min(prev + 4, 100);
       });
-    }, 30);
+    }, 25);
     return () => clearInterval(interval);
   }, []);
 
@@ -25,13 +25,18 @@ export default function Preloader() {
     <AnimatePresence>
       {loading && (
         <motion.div
-          className="fixed inset-0 z-[9999] bg-bg flex items-end p-6 md:p-12"
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.8, ease: [0.87, 0, 0.13, 1] }}
+          className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center"
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="font-display text-[20vw] font-bold text-fg leading-none" style={{ fontVariantNumeric: "tabular-nums" }}>
-            {count}
-          </span>
+          <motion.div
+            className="w-16 h-16 rounded-full border-4 border-accent/20 border-t-accent"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+          <p className="mt-6 text-fg font-display text-sm font-semibold tracking-wider">
+            {count}%
+          </p>
         </motion.div>
       )}
     </AnimatePresence>

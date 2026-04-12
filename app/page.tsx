@@ -2,7 +2,6 @@
 
 import Preloader from "@/components/ui/Preloader";
 import SmoothScroll from "@/components/ui/SmoothScroll";
-import CustomCursor from "@/components/ui/CustomCursor";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -19,8 +18,6 @@ export default function Home() {
     <>
       <Preloader />
       <SmoothScroll />
-      <CustomCursor />
-      <div className="noise-overlay" />
 
       <Navbar />
       <main>

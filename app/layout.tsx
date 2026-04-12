@@ -17,26 +17,14 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Ankit Kumar Singh — Strategic Marketing & AI | 3D Portfolio",
+  title: "Ankit Kumar Singh — Marketing, AI & Full-Stack Portfolio",
   description:
-    "Strategic Marketing Professional, AI Integration Specialist, and Full-Stack Web/App Developer. Building at the intersection of Marketing, AI & Technology.",
+    "Strategic Marketing Professional, AI Integration Specialist, and Full-Stack Developer. 6+ years building at the intersection of Marketing, AI & Technology.",
   keywords: [
-    "Ankit Kumar Singh",
-    "Marketing",
-    "AI",
-    "Full Stack Developer",
-    "Next.js",
-    "Portfolio",
-    "Prompt Engineering",
-    "Resurgent India",
+    "Ankit Kumar Singh", "Marketing", "AI", "Full Stack Developer",
+    "Next.js", "Portfolio", "Prompt Engineering", "Resurgent India",
   ],
   authors: [{ name: "Ankit Kumar Singh" }],
-  openGraph: {
-    title: "Ankit Kumar Singh — Strategic Marketing & AI",
-    description:
-      "Strategic Marketing Professional, AI Integration Specialist, and Full-Stack Developer",
-    type: "website",
-  },
 };
 
 export default function RootLayout({
@@ -45,22 +33,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@100..900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-void text-text-primary antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>
