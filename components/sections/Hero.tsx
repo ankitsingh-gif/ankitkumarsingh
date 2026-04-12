@@ -58,23 +58,31 @@ export default function Hero() {
             <span className="text-accent text-xs font-semibold tracking-wider">Available for projects</span>
           </motion.div>
 
-          {/* Heading */}
+          {/* Name */}
           <motion.h1
-            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-fg leading-[1.1] mb-4"
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-fg leading-[1.1] mb-3"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            Hi, I&apos;m {siteConfig.name.split(" ")[0]} —
-            <br />
-            <span className="h-[1.2em] inline-flex items-baseline">
-              <RotatingRole texts={heroRoles} />
-            </span>
+            Hi, I&apos;m {siteConfig.name.split(" ")[0]}
           </motion.h1>
+
+          {/* Rotating role — separate block, smaller size, fixed height */}
+          <motion.div
+            className="h-10 md:h-12 overflow-hidden mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            <div className="font-display text-2xl md:text-3xl font-bold">
+              <RotatingRole texts={heroRoles} />
+            </div>
+          </motion.div>
 
           {/* Subtitle */}
           <motion.p
-            className="text-fg-secondary text-lg md:text-xl leading-relaxed max-w-lg mb-10"
+            className="text-fg-secondary text-base md:text-lg leading-relaxed max-w-lg mb-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
