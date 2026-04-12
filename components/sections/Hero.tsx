@@ -1,8 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig, heroRoles } from "@/data/portfolio-data";
+
+const HeroModel = dynamic(() => import("@/components/canvas/HeroModel"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-16 h-16 rounded-full border-4 border-accent/20 border-t-accent animate-spin" />
+    </div>
+  ),
+});
 
 function RotatingRole({ texts }: { texts: string[] }) {
   const [i, setI] = useState(0);
@@ -30,14 +40,13 @@ function RotatingRole({ texts }: { texts: string[] }) {
 export default function Hero() {
   return (
     <section id="home" className="min-h-screen flex items-center pt-20 pb-16 px-6 md:px-10 relative overflow-hidden">
-      {/* Background decorations */}
+      {/* Background blobs */}
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-40 left-1/2 w-[300px] h-[300px] bg-pink-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        {/* Left — Text content */}
-        <div>
+      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        {/* ===== LEFT — Text (never overlapped) ===== */}
+        <div className="relative z-10">
           {/* Badge */}
           <motion.div
             className="inline-flex items-center gap-2 px-4 py-2 bg-accent-bg rounded-full mb-8"
@@ -92,7 +101,7 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          {/* Stats mini row */}
+          {/* Stats */}
           <motion.div
             className="flex gap-8 mt-12"
             initial={{ opacity: 0 }}
@@ -112,56 +121,46 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right — Visual/Image area */}
+        {/* ===== RIGHT — 3D Model (contained, no overlap) ===== */}
         <motion.div
-          className="relative hidden lg:block"
-          initial={{ opacity: 0, scale: 0.9 }}
+          className="relative hidden lg:block h-[500px] xl:h-[550px]"
+          initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* Main card */}
-          <div className="relative bg-gradient-to-br from-accent/10 via-purple-500/10 to-pink-500/10 rounded-3xl p-8 aspect-square flex items-center justify-center">
-            {/* Floating elements */}
-            <div className="absolute -top-4 -right-4 px-4 py-2 bg-white rounded-xl shadow-lg animate-float flex items-center gap-2">
-              <span className="text-2xl">🚀</span>
-              <div>
-                <p className="text-fg text-xs font-semibold">Next.js</p>
-                <p className="text-fg-muted text-[10px]">Full-Stack</p>
-              </div>
-            </div>
+          {/* Decorative dots behind the 3D */}
+          <div className="absolute -z-10 top-4 -left-8 w-40 h-40 opacity-15" style={{
+            backgroundImage: "radial-gradient(circle, var(--accent) 1px, transparent 1px)",
+            backgroundSize: "14px 14px",
+          }} />
 
-            <div className="absolute -bottom-3 -left-3 px-4 py-2 bg-white rounded-xl shadow-lg animate-float-delay flex items-center gap-2">
-              <span className="text-2xl">🤖</span>
-              <div>
-                <p className="text-fg text-xs font-semibold">AI & Prompt Eng.</p>
-                <p className="text-fg-muted text-[10px]">Generative AI</p>
-              </div>
-            </div>
+          {/* 3D Canvas — fully contained */}
+          <HeroModel />
 
-            <div className="absolute top-1/2 -right-6 px-4 py-2 bg-white rounded-xl shadow-lg animate-float flex items-center gap-2">
-              <span className="text-2xl">📊</span>
-              <div>
-                <p className="text-fg text-xs font-semibold">Marketing</p>
-                <p className="text-fg-muted text-[10px]">C-Suite Campaigns</p>
-              </div>
-            </div>
-
-            {/* Center content */}
-            <div className="text-center">
-              <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center mb-6 shadow-xl shadow-accent/20">
-                <span className="text-white font-display text-4xl font-bold">{siteConfig.initials}</span>
-              </div>
-              <p className="text-fg font-display font-bold text-lg">Asst. Manager</p>
-              <p className="text-fg-secondary text-sm">Resurgent India Limited</p>
-              <p className="text-accent text-xs font-medium mt-1">SEBI Cat-I Merchant Bank</p>
+          {/* Floating label badges around the 3D model */}
+          <div className="absolute top-6 right-4 px-3 py-2 bg-white rounded-xl shadow-lg animate-float flex items-center gap-2 z-10">
+            <span className="text-xl">🚀</span>
+            <div>
+              <p className="text-fg text-[11px] font-semibold">Next.js</p>
+              <p className="text-fg-muted text-[9px]">Full-Stack</p>
             </div>
           </div>
 
-          {/* Decorative dots */}
-          <div className="absolute -z-10 top-8 -left-8 w-48 h-48 opacity-20" style={{
-            backgroundImage: "radial-gradient(circle, var(--accent) 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }} />
+          <div className="absolute bottom-12 left-0 px-3 py-2 bg-white rounded-xl shadow-lg animate-float-delay flex items-center gap-2 z-10">
+            <span className="text-xl">🤖</span>
+            <div>
+              <p className="text-fg text-[11px] font-semibold">AI & Prompt Eng.</p>
+              <p className="text-fg-muted text-[9px]">Generative AI</p>
+            </div>
+          </div>
+
+          <div className="absolute top-1/2 -right-2 px-3 py-2 bg-white rounded-xl shadow-lg animate-float flex items-center gap-2 z-10">
+            <span className="text-xl">📊</span>
+            <div>
+              <p className="text-fg text-[11px] font-semibold">Marketing</p>
+              <p className="text-fg-muted text-[9px]">C-Suite Campaigns</p>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
