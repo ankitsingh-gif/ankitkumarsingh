@@ -1,47 +1,52 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
 import * as THREE from "three";
-import FloatingParticles from "./FloatingParticles";
 
 export default function Background3D() {
-  const starsRef = useRef<THREE.Group>(null);
+  const pointsRef = useRef<THREE.Points>(null);
 
-  useFrame((_, delta) => {
-    if (starsRef.current) {
-      starsRef.current.rotation.y += delta * 0.01;
-      starsRef.current.rotation.x += delta * 0.005;
+  const positions = useMemo(() => {
+    const count = 400;
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 40;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 30 - 10;
+    }
+    return pos;
+  }, []);
+
+  useFrame((state) => {
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.008;
+      pointsRef.current.rotation.x = state.clock.elapsedTime * 0.003;
     }
   });
 
   return (
     <group>
-      {/* Star field */}
-      <group ref={starsRef}>
-        <Stars
-          radius={100}
-          depth={80}
-          count={3000}
-          factor={4}
-          saturation={0}
-          fade
-          speed={0.5}
+      <ambientLight intensity={0.02} />
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[positions, 3]}
+            count={400}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.015}
+          color="#c0f0ff"
+          transparent
+          opacity={0.15}
+          sizeAttenuation
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
-      </group>
-
-      {/* Teal particles */}
-      <FloatingParticles count={300} color="#00E5FF" size={0.012} spread={25} />
-
-      {/* Gold particles (fewer, larger) */}
-      <FloatingParticles count={80} color="#FFD700" size={0.02} spread={20} />
-
-      {/* Ambient lighting */}
-      <ambientLight intensity={0.1} />
-
-      {/* Fog */}
-      <fog attach="fog" args={["#0A0F1A", 15, 40]} />
+      </points>
+      <fog attach="fog" args={["#050505", 10, 40]} />
     </group>
   );
 }

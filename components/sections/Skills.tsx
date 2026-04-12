@@ -1,107 +1,81 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { AdaptiveDpr, OrbitControls } from "@react-three/drei";
 import { motion } from "framer-motion";
-import SectionHeading from "@/components/ui/SectionHeading";
-import SkillSphere from "@/components/canvas/SkillSphere";
 import { skillCategories } from "@/data/portfolio-data";
 
-function SkillLegend() {
+export default function Skills() {
+  // Flatten all skills for marquee
+  const allSkills = skillCategories.flatMap((c) => c.skills);
+  const marqueeText = allSkills.join(" \u00B7 ");
+
   return (
-    <div className="flex flex-wrap justify-center gap-4 mt-8">
-      {skillCategories.map((cat) => (
-        <div key={cat.name} className="flex items-center gap-2">
-          <div
-            className="w-2.5 h-2.5 rounded-full"
-            style={{ backgroundColor: cat.color }}
-          />
-          <span className="text-text-secondary text-xs font-heading tracking-wider">
-            {cat.name}
+    <section id="skills" className="py-32 overflow-hidden">
+      <div className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
+        {/* Section label */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <span className="section-number">04 / SKILLS</span>
+        </motion.div>
+
+        <motion.h2
+          className="font-display text-section-title font-bold text-text-primary mb-24"
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          Tools &
+          <br />
+          <span className="text-accent">expertise</span>
+        </motion.h2>
+      </div>
+
+      {/* Infinite marquee */}
+      <div className="mb-24 py-8 border-y border-text-muted overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap">
+          <span className="font-display text-4xl md:text-6xl font-bold text-text-muted mx-4">
+            {marqueeText} &middot; {marqueeText}
           </span>
         </div>
-      ))}
-    </div>
-  );
-}
+      </div>
 
-export default function Skills() {
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-
-  return (
-    <section id="skills" className="section">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeading
-          title="Skills & Tools"
-          subtitle="An interactive universe of capabilities — drag to explore"
-        />
-
-        {/* 3D Skill Sphere */}
-        <div className="relative w-full h-[500px] md:h-[600px]">
-          <Canvas
-            camera={{ position: [0, 0, 8], fov: 50 }}
-            dpr={[1, 1.5]}
-          >
-            <Suspense fallback={null}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} intensity={1} />
-              <SkillSphere onSkillHover={setHoveredSkill} />
-              <OrbitControls
-                enableZoom={false}
-                enablePan={false}
-                autoRotate={false}
-                maxPolarAngle={Math.PI}
-                minPolarAngle={0}
-              />
-              <AdaptiveDpr pixelated />
-            </Suspense>
-          </Canvas>
-
-          {/* Hover tooltip */}
-          {hoveredSkill && (
+      {/* Skill categories grid */}
+      <div className="px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+          {skillCategories.map((cat, i) => (
             <motion.div
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 glass px-4 py-2 rounded-full"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <span className="text-accent font-heading text-sm">
-                {hoveredSkill}
-              </span>
-            </motion.div>
-          )}
-        </div>
-
-        {/* Legend */}
-        <SkillLegend />
-
-        {/* Mobile fallback: flat skill grid */}
-        <div className="md:hidden mt-12 space-y-6">
-          {skillCategories.map((cat) => (
-            <motion.div
-              key={cat.name}
-              initial={{ opacity: 0, y: 20 }}
+              key={i}
+              className="group"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h4
-                className="font-heading text-sm font-semibold mb-3 tracking-wider"
-                style={{ color: cat.color }}
-              >
-                {cat.name}
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {cat.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1.5 text-xs rounded-full glass"
-                    style={{
-                      color: cat.color,
-                      borderColor: `${cat.color}30`,
-                    }}
+              {/* Category header */}
+              <div className="flex items-center gap-3 mb-5">
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: cat.color }}
+                />
+                <h3 className="font-display text-sm font-bold tracking-[0.15em] uppercase text-text-primary">
+                  {cat.name}
+                </h3>
+              </div>
+
+              {/* Skills */}
+              <div className="space-y-2">
+                {cat.skills.map((skill, j) => (
+                  <motion.div
+                    key={j}
+                    className="text-text-secondary text-sm hover:text-text-primary hover:pl-2 transition-all duration-300"
+                    data-cursor="pointer"
                   >
                     {skill}
-                  </span>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>

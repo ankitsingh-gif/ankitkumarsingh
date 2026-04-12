@@ -1,131 +1,156 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { MeshDistortMaterial, Float, Sparkles } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { MeshDistortMaterial, Float } from "@react-three/drei";
 import * as THREE from "three";
 
-function CentralObject() {
+function DistortionSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const mouse = useRef({ x: 0, y: 0 });
 
   useFrame((state) => {
     if (!meshRef.current) return;
     const t = state.clock.elapsedTime;
 
     // Smooth mouse follow
-    const mouse = state.pointer;
-    mouseRef.current.x += (mouse.x * 0.3 - mouseRef.current.x) * 0.05;
-    mouseRef.current.y += (mouse.y * 0.3 - mouseRef.current.y) * 0.05;
+    const pointer = state.pointer;
+    mouse.current.x += (pointer.x * 0.5 - mouse.current.x) * 0.03;
+    mouse.current.y += (pointer.y * 0.5 - mouse.current.y) * 0.03;
 
-    meshRef.current.rotation.x = t * 0.1 + mouseRef.current.y * 0.5;
-    meshRef.current.rotation.y = t * 0.15 + mouseRef.current.x * 0.5;
-    meshRef.current.rotation.z = t * 0.05;
+    meshRef.current.rotation.x = t * 0.05 + mouse.current.y * 0.3;
+    meshRef.current.rotation.y = t * 0.08 + mouse.current.x * 0.3;
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.8}>
-      <mesh ref={meshRef} scale={2.2}>
-        <icosahedronGeometry args={[1, 4]} />
+    <Float speed={0.8} rotationIntensity={0.1} floatIntensity={0.4}>
+      <mesh ref={meshRef} scale={2.8}>
+        <icosahedronGeometry args={[1, 64]} />
         <MeshDistortMaterial
-          color="#00E5FF"
+          color="#1a1a2e"
           emissive="#00E5FF"
-          emissiveIntensity={0.15}
-          roughness={0.2}
-          metalness={0.8}
-          distort={0.25}
+          emissiveIntensity={0.08}
+          roughness={0.15}
+          metalness={0.95}
+          distort={0.35}
           speed={1.5}
-          transparent
-          opacity={0.85}
         />
       </mesh>
-      {/* Wireframe overlay */}
-      <mesh scale={2.3}>
-        <icosahedronGeometry args={[1, 2]} />
+      {/* Wireframe ghost */}
+      <mesh scale={3.0}>
+        <icosahedronGeometry args={[1, 8]} />
         <meshBasicMaterial
-          color="#FFD700"
+          color="#00E5FF"
           wireframe
           transparent
-          opacity={0.12}
+          opacity={0.04}
         />
       </mesh>
     </Float>
   );
 }
 
-function OrbitalRing({
-  radius,
-  speed,
-  color,
-  count,
-}: {
-  radius: number;
-  speed: number;
-  color: string;
-  count: number;
-}) {
-  const groupRef = useRef<THREE.Group>(null);
+function FloatingGrid() {
+  const gridRef = useRef<THREE.Group>(null);
 
-  const positions = useMemo(() => {
-    const pts: [number, number, number][] = [];
-    for (let i = 0; i < count; i++) {
-      const angle = (i / count) * Math.PI * 2;
-      pts.push([Math.cos(angle) * radius, Math.sin(angle) * radius * 0.3, Math.sin(angle) * radius]);
+  const lines = useMemo(() => {
+    const arr: [number, number, number][] = [];
+    for (let i = -10; i <= 10; i += 2) {
+      arr.push([i, -4, 0]);
     }
-    return pts;
-  }, [radius, count]);
+    return arr;
+  }, []);
 
   useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * speed;
+    if (gridRef.current) {
+      gridRef.current.rotation.x = -Math.PI / 3;
+      gridRef.current.position.y = -2 + Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
     }
   });
 
   return (
-    <group ref={groupRef}>
-      {positions.map((pos, i) => (
-        <mesh key={i} position={pos}>
-          <sphereGeometry args={[0.02, 8, 8]} />
-          <meshBasicMaterial color={color} transparent opacity={0.6} />
+    <group ref={gridRef} position={[0, -3, -5]}>
+      {lines.map((pos, i) => (
+        <mesh key={`h-${i}`} position={[pos[0], 0, 0]}>
+          <boxGeometry args={[0.005, 20, 0.005]} />
+          <meshBasicMaterial color="#00E5FF" transparent opacity={0.06} />
+        </mesh>
+      ))}
+      {lines.map((pos, i) => (
+        <mesh key={`v-${i}`} position={[0, pos[0], 0]}>
+          <boxGeometry args={[20, 0.005, 0.005]} />
+          <meshBasicMaterial color="#00E5FF" transparent opacity={0.06} />
         </mesh>
       ))}
     </group>
   );
 }
 
-export default function HeroScene() {
-  const { viewport } = useThree();
-  const scale = Math.min(viewport.width, viewport.height) / 8;
+function Particles() {
+  const pointsRef = useRef<THREE.Points>(null);
+
+  const positions = useMemo(() => {
+    const count = 800;
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 30;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
+    }
+    return pos;
+  }, []);
+
+  useFrame((state) => {
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.015;
+    }
+  });
 
   return (
-    <group scale={scale}>
-      {/* Lights */}
-      <pointLight position={[5, 5, 5]} color="#00E5FF" intensity={2} />
-      <pointLight position={[-5, -3, 3]} color="#FFD700" intensity={1.5} />
-      <pointLight position={[0, 0, 5]} color="#ffffff" intensity={0.5} />
-
-      {/* Central morphing icosahedron */}
-      <CentralObject />
-
-      {/* Orbital particle rings */}
-      <OrbitalRing radius={3.5} speed={0.2} color="#00E5FF" count={60} />
-      <OrbitalRing radius={4.5} speed={-0.15} color="#FFD700" count={40} />
-
-      {/* Sparkles */}
-      <Sparkles
-        count={100}
-        scale={10}
-        size={2}
-        speed={0.3}
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} count={800} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.02}
         color="#00E5FF"
+        transparent
+        opacity={0.3}
+        sizeAttenuation
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
-      <Sparkles
-        count={40}
-        scale={8}
-        size={3}
-        speed={0.2}
-        color="#FFD700"
+    </points>
+  );
+}
+
+export default function HeroScene() {
+  return (
+    <group>
+      {/* Dramatic lighting */}
+      <ambientLight intensity={0.05} />
+      <spotLight
+        position={[5, 8, 5]}
+        intensity={1.5}
+        color="#00E5FF"
+        angle={0.4}
+        penumbra={1}
+        castShadow={false}
       />
+      <spotLight
+        position={[-5, -5, 3]}
+        intensity={0.8}
+        color="#e8c547"
+        angle={0.6}
+        penumbra={1}
+      />
+      <pointLight position={[0, 0, 5]} intensity={0.3} color="#ffffff" />
+
+      <DistortionSphere />
+      <FloatingGrid />
+      <Particles />
+
+      <fog attach="fog" args={["#050505", 8, 30]} />
     </group>
   );
 }
