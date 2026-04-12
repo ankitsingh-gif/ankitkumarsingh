@@ -104,16 +104,22 @@ export default function Hero() {
       {/* ===== CONTENT — properly spaced below navbar ===== */}
       <div className="relative z-[2] h-full flex flex-col justify-center pt-20 px-6 md:px-12 lg:px-20">
         <div className="max-w-3xl">
-          {/* Intro badges */}
+          {/* Current role & skills */}
           <motion.div
-            className="flex flex-wrap gap-3 mb-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
+            className="flex flex-wrap items-center gap-2 mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
           >
-            <FloatingBadge text="Marketing" delay={0.9} />
-            <FloatingBadge text="AI" delay={1.0} />
-            <FloatingBadge text="Full-Stack Dev" delay={1.1} />
+            <span className="text-accent text-xs tracking-[0.2em] uppercase font-display font-semibold">Currently:</span>
+            <span className="text-text-secondary text-xs tracking-wider">
+              Asst. Manager @ Resurgent India
+            </span>
+            <span className="text-text-muted mx-1">/</span>
+            <FloatingBadge text="Next.js" delay={0.9} />
+            <FloatingBadge text="AI & Prompt Eng." delay={1.0} />
+            <FloatingBadge text="Email Campaigns" delay={1.1} />
+            <FloatingBadge text="SEO" delay={1.15} />
           </motion.div>
 
           {/* Name — large, word-by-word reveal */}
