@@ -3,12 +3,37 @@
 import { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import HeroScene from "@/components/canvas/HeroScene";
 import PostProcessing from "@/components/canvas/effects/PostProcessing";
 import { siteConfig, heroRoles, heroSubtitle } from "@/data/portfolio-data";
 
-function RotatingText({ texts }: { texts: string[] }) {
+/* Animated word-by-word text reveal */
+function AnimatedWords({ text, delay = 0 }: { text: string; delay?: number }) {
+  return (
+    <span className="inline-flex flex-wrap">
+      {text.split(" ").map((word, i) => (
+        <span key={i} className="overflow-hidden inline-block mr-[0.3em]">
+          <motion.span
+            className="inline-block"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: delay + i * 0.06,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* Rotating role text with slide animation */
+function RotatingRole({ texts }: { texts: string[] }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -19,25 +44,45 @@ function RotatingText({ texts }: { texts: string[] }) {
   }, [texts.length]);
 
   return (
-    <div className="overflow-hidden h-[1.2em]">
-      <motion.div
-        key={index}
-        initial={{ y: "110%" }}
-        animate={{ y: 0 }}
-        exit={{ y: "-110%" }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="text-gold"
-      >
-        {texts[index]}
-      </motion.div>
+    <div className="overflow-hidden h-[1.3em]">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-gold"
+        >
+          {texts[index]}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
 
+/* Floating animated badge */
+function FloatingBadge({ text, delay }: { text: string; delay: number }) {
+  return (
+    <motion.span
+      className="inline-block px-3 py-1.5 rounded-full text-[10px] tracking-[0.2em] uppercase font-display border border-border text-text-secondary"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+    >
+      {text}
+    </motion.span>
+  );
+}
+
 export default function Hero() {
+  const firstName = siteConfig.name.split(" ")[0];
+  const lastName = siteConfig.name.split(" ").slice(1).join(" ");
+
   return (
     <section id="home" className="relative h-screen w-full overflow-hidden">
-      {/* 3D Canvas */}
+      {/* 3D Canvas — only in dark mode */}
       <div className="absolute inset-0 z-0">
         <Canvas
           camera={{ position: [0, 0, 6], fov: 55 }}
@@ -52,81 +97,61 @@ export default function Hero() {
         </Canvas>
       </div>
 
-      {/* Strong gradient overlays for text readability */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-void/60 via-void/20 to-void pointer-events-none" />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-void/80 via-void/30 to-transparent pointer-events-none" />
+      {/* Gradient overlays for text protection */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-void via-void/70 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-void/50 via-transparent to-void/90 pointer-events-none" />
 
-      {/* Content — centered vertically, left-aligned */}
-      <div className="relative z-[2] h-full flex flex-col justify-center px-6 md:px-12 lg:px-20">
-        {/* Top label */}
-        <motion.div
-          className="absolute top-28 left-6 md:left-12 lg:left-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-        >
-          <span className="section-number">PORTFOLIO / 2026</span>
-        </motion.div>
-
-        {/* Main content block */}
+      {/* ===== CONTENT — properly spaced below navbar ===== */}
+      <div className="relative z-[2] h-full flex flex-col justify-center pt-20 px-6 md:px-12 lg:px-20">
         <div className="max-w-3xl">
-          {/* Small intro line */}
-          <motion.p
-            className="text-text-secondary text-sm md:text-base tracking-[0.2em] uppercase mb-6 font-display"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            Hello, I&apos;m
-          </motion.p>
-
-          {/* Name — large, clear white */}
-          <motion.h1
-            className="font-display text-[clamp(2.5rem,8vw,7rem)] font-bold leading-[0.95] mb-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className="text-white">{siteConfig.name.split(" ")[0]}</span>
-            <br />
-            <span className="text-white">{siteConfig.name.split(" ").slice(1).join(" ")}</span>
-          </motion.h1>
-
-          {/* Rotating role — gold color for contrast */}
+          {/* Intro badges */}
           <motion.div
-            className="font-display text-xl md:text-3xl lg:text-4xl font-semibold mb-8"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <RotatingText texts={heroRoles} />
-          </motion.div>
-
-          {/* Thin separator */}
-          <motion.div
-            className="w-16 h-px bg-text-secondary mb-8"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 1.3, duration: 0.8 }}
-            style={{ transformOrigin: "left" }}
-          />
-
-          {/* Subtitle */}
-          <motion.p
-            className="text-text-secondary text-sm md:text-base max-w-lg leading-relaxed mb-10"
+            className="flex flex-wrap gap-3 mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            <FloatingBadge text="Marketing" delay={0.9} />
+            <FloatingBadge text="AI" delay={1.0} />
+            <FloatingBadge text="Full-Stack Dev" delay={1.1} />
+          </motion.div>
+
+          {/* Name — large, word-by-word reveal */}
+          <h1 className="font-display text-hero font-bold leading-[1] mb-2">
+            <AnimatedWords text={firstName} delay={1.2} />
+            <br />
+            <AnimatedWords text={lastName} delay={1.5} />
+          </h1>
+
+          {/* Rotating role */}
+          <div className="font-display text-xl md:text-3xl lg:text-4xl font-semibold mt-4 mb-8">
+            <RotatingRole texts={heroRoles} />
+          </div>
+
+          {/* Animated separator line */}
+          <motion.div
+            className="h-px bg-text-muted mb-6"
+            initial={{ width: 0 }}
+            animate={{ width: "5rem" }}
+            transition={{ delay: 2.0, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          />
+
+          {/* Subtitle — fade in */}
+          <motion.p
+            className="text-text-secondary text-sm md:text-base max-w-md leading-relaxed mb-10"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.2, duration: 0.8 }}
           >
             {heroSubtitle}
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTA buttons */}
           <motion.div
-            className="flex flex-wrap gap-6 items-center"
+            className="flex flex-wrap gap-5 items-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8, duration: 0.8 }}
+            transition={{ delay: 2.5, duration: 0.8 }}
           >
             <a href="#projects" className="magnetic-btn" data-cursor="pointer">
               EXPLORE WORK
@@ -136,7 +161,7 @@ export default function Hero() {
             </a>
             <a
               href={siteConfig.resumeUrl}
-              className="text-text-secondary text-sm tracking-[0.15em] hover:text-gold transition-colors duration-500"
+              className="text-text-secondary text-sm tracking-[0.12em] hover:text-gold transition-colors duration-500"
               data-cursor="pointer"
             >
               DOWNLOAD CV &rarr;
@@ -144,18 +169,18 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator — bottom right */}
+        {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 right-6 md:right-12 flex flex-col items-center gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.5 }}
+          transition={{ delay: 3 }}
         >
-          <span className="text-text-muted text-[10px] tracking-[0.3em] uppercase rotate-90 origin-center translate-x-3 mb-8">
+          <span className="text-text-muted text-[9px] tracking-[0.3em] uppercase rotate-90 origin-center translate-x-3 mb-8">
             SCROLL
           </span>
           <motion.div
-            className="w-px h-12 bg-gradient-to-b from-text-secondary to-transparent"
+            className="w-px h-10 bg-gradient-to-b from-text-secondary to-transparent"
             animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             style={{ transformOrigin: "top" }}

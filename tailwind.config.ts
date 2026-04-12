@@ -9,21 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: "#050505",
-        "void-light": "#0a0a0a",
-        accent: "#d4b8ff",
-        "accent-bright": "#a855f7",
-        gold: "#e8c547",
-        "text-primary": "#ffffff",
-        "text-secondary": "#888",
-        "text-muted": "#444",
+        void: "var(--bg)",
+        "void-light": "var(--bg-secondary)",
+        accent: "var(--accent)",
+        "accent-bright": "var(--accent)",
+        "accent-soft": "var(--accent-soft)",
+        gold: "var(--gold)",
+        "text-primary": "var(--text-primary)",
+        "text-secondary": "var(--text-secondary)",
+        "text-muted": "var(--text-muted)",
+        border: "var(--border)",
       },
       fontFamily: {
         display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
         body: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "hero": ["clamp(3rem, 10vw, 10rem)", { lineHeight: "0.9", letterSpacing: "-0.03em" }],
+        "hero": ["clamp(3rem, 8vw, 8rem)", { lineHeight: "1", letterSpacing: "-0.03em" }],
         "section-title": ["clamp(2.5rem, 6vw, 6rem)", { lineHeight: "0.95", letterSpacing: "-0.02em" }],
       },
       transitionTimingFunction: {
