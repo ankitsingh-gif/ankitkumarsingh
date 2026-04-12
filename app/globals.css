@@ -5,12 +5,12 @@
 :root {
   --void: #050505;
   --void-light: #0a0a0a;
-  --accent: #c0f0ff;
-  --accent-bright: #00E5FF;
+  --accent: #d4b8ff;
+  --accent-bright: #a855f7;
   --gold: #e8c547;
-  --text-primary: #f0f0f0;
-  --text-secondary: #666;
-  --text-muted: #333;
+  --text-primary: #ffffff;
+  --text-secondary: #888;
+  --text-muted: #444;
 }
 
 * {
@@ -69,7 +69,7 @@ body {
   left: 0;
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(192, 240, 255, 0.4);
+  border: 1px solid rgba(168, 85, 247, 0.4);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
@@ -80,7 +80,7 @@ body {
   width: 60px;
   height: 60px;
   border-color: var(--accent-bright);
-  background: rgba(0, 229, 255, 0.05);
+  background: rgba(168, 85, 247, 0.05);
 }
 
 /* Canvas layer */
@@ -139,7 +139,7 @@ body {
 .line-reveal {
   width: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--accent-bright), transparent);
+  background: linear-gradient(90deg, var(--accent), transparent);
   transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -242,7 +242,7 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(0, 229, 255, 0.2);
+  background: rgba(168, 85, 247, 0.2);
   color: #fff;
 }
 

@@ -11,12 +11,12 @@ const config: Config = {
       colors: {
         void: "#050505",
         "void-light": "#0a0a0a",
-        accent: "#c0f0ff",
-        "accent-bright": "#00E5FF",
+        accent: "#d4b8ff",
+        "accent-bright": "#a855f7",
         gold: "#e8c547",
-        "text-primary": "#f0f0f0",
-        "text-secondary": "#666",
-        "text-muted": "#333",
+        "text-primary": "#ffffff",
+        "text-secondary": "#888",
+        "text-muted": "#444",
       },
       fontFamily: {
         display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],

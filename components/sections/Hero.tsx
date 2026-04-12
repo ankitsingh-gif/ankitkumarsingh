@@ -19,14 +19,14 @@ function RotatingText({ texts }: { texts: string[] }) {
   }, [texts.length]);
 
   return (
-    <div className="overflow-hidden h-[1.1em]">
+    <div className="overflow-hidden h-[1.2em]">
       <motion.div
         key={index}
-        initial={{ y: "100%" }}
+        initial={{ y: "110%" }}
         animate={{ y: 0 }}
-        exit={{ y: "-100%" }}
+        exit={{ y: "-110%" }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="text-accent-bright"
+        className="text-gold"
       >
         {texts[index]}
       </motion.div>
@@ -52,13 +52,13 @@ export default function Hero() {
         </Canvas>
       </div>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-void/20 via-transparent to-void pointer-events-none" />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-void/40 via-transparent to-void/40 pointer-events-none" />
+      {/* Strong gradient overlays for text readability */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-void/60 via-void/20 to-void pointer-events-none" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-void/80 via-void/30 to-transparent pointer-events-none" />
 
-      {/* Content */}
-      <div className="relative z-[2] h-full flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-12 lg:px-20">
-        {/* Top left label */}
+      {/* Content — centered vertically, left-aligned */}
+      <div className="relative z-[2] h-full flex flex-col justify-center px-6 md:px-12 lg:px-20">
+        {/* Top label */}
         <motion.div
           className="absolute top-28 left-6 md:left-12 lg:left-20"
           initial={{ opacity: 0 }}
@@ -68,32 +68,52 @@ export default function Hero() {
           <span className="section-number">PORTFOLIO / 2026</span>
         </motion.div>
 
-        {/* Main title */}
-        <div className="max-w-6xl">
+        {/* Main content block */}
+        <div className="max-w-3xl">
+          {/* Small intro line */}
+          <motion.p
+            className="text-text-secondary text-sm md:text-base tracking-[0.2em] uppercase mb-6 font-display"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Hello, I&apos;m
+          </motion.p>
+
+          {/* Name — large, clear white */}
           <motion.h1
-            className="font-display text-hero font-bold text-text-primary mb-4"
-            initial={{ opacity: 0, y: 60 }}
+            className="font-display text-[clamp(2.5rem,8vw,7rem)] font-bold leading-[0.95] mb-6"
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            {siteConfig.name.split(" ")[0]}
+            <span className="text-white">{siteConfig.name.split(" ")[0]}</span>
             <br />
-            <span className="text-accent">
-              {siteConfig.name.split(" ").slice(1).join(" ")}
-            </span>
+            <span className="text-white">{siteConfig.name.split(" ").slice(1).join(" ")}</span>
           </motion.h1>
 
+          {/* Rotating role — gold color for contrast */}
           <motion.div
-            className="font-display text-2xl md:text-4xl lg:text-5xl font-bold mb-6"
-            initial={{ opacity: 0, y: 40 }}
+            className="font-display text-xl md:text-3xl lg:text-4xl font-semibold mb-8"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
           >
             <RotatingText texts={heroRoles} />
           </motion.div>
 
+          {/* Thin separator */}
+          <motion.div
+            className="w-16 h-px bg-text-secondary mb-8"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 1.3, duration: 0.8 }}
+            style={{ transformOrigin: "left" }}
+          />
+
+          {/* Subtitle */}
           <motion.p
-            className="text-text-secondary text-sm md:text-base max-w-xl leading-relaxed mb-10"
+            className="text-text-secondary text-sm md:text-base max-w-lg leading-relaxed mb-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5, duration: 1 }}
@@ -101,8 +121,9 @@ export default function Hero() {
             {heroSubtitle}
           </motion.p>
 
+          {/* CTAs */}
           <motion.div
-            className="flex gap-6 items-center"
+            className="flex flex-wrap gap-6 items-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.8, duration: 0.8 }}
@@ -115,7 +136,7 @@ export default function Hero() {
             </a>
             <a
               href={siteConfig.resumeUrl}
-              className="text-text-secondary text-sm tracking-wider hover:text-accent-bright transition-colors duration-500"
+              className="text-text-secondary text-sm tracking-[0.15em] hover:text-gold transition-colors duration-500"
               data-cursor="pointer"
             >
               DOWNLOAD CV &rarr;
@@ -123,7 +144,7 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator — bottom right */}
         <motion.div
           className="absolute bottom-8 right-6 md:right-12 flex flex-col items-center gap-2"
           initial={{ opacity: 0 }}
@@ -134,7 +155,7 @@ export default function Hero() {
             SCROLL
           </span>
           <motion.div
-            className="w-px h-12 bg-gradient-to-b from-accent-bright to-transparent"
+            className="w-px h-12 bg-gradient-to-b from-text-secondary to-transparent"
             animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             style={{ transformOrigin: "top" }}
