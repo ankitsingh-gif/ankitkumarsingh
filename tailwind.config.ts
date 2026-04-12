@@ -9,31 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: "var(--bg)",
-        "void-light": "var(--bg-secondary)",
+        bg: "var(--bg)",
+        "bg-secondary": "var(--bg-secondary)",
+        fg: "var(--fg)",
+        "fg-secondary": "var(--fg-secondary)",
+        "fg-muted": "var(--fg-muted)",
         accent: "var(--accent)",
-        "accent-bright": "var(--accent)",
-        "accent-soft": "var(--accent-soft)",
-        gold: "var(--gold)",
-        "text-primary": "var(--text-primary)",
-        "text-secondary": "var(--text-secondary)",
-        "text-muted": "var(--text-muted)",
         border: "var(--border)",
       },
       fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
-        body: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "hero": ["clamp(3rem, 8vw, 8rem)", { lineHeight: "1", letterSpacing: "-0.03em" }],
-        "section-title": ["clamp(2.5rem, 6vw, 6rem)", { lineHeight: "0.95", letterSpacing: "-0.02em" }],
-      },
-      transitionTimingFunction: {
-        "expo-out": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "expo-in-out": "cubic-bezier(0.87, 0, 0.13, 1)",
-      },
-      animation: {
-        "marquee": "marquee 30s linear infinite",
+        "massive": ["clamp(3.5rem, 12vw, 14rem)", { lineHeight: "0.85", letterSpacing: "-0.04em" }],
+        "large": ["clamp(2rem, 5vw, 5rem)", { lineHeight: "1", letterSpacing: "-0.02em" }],
       },
     },
   },

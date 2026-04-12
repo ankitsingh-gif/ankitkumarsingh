@@ -1,90 +1,59 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { aboutText, stats } from "@/data/portfolio-data";
-import { useInView } from "@/hooks/useInView";
-
-function Counter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
-  const { ref, inView } = useInView({ threshold: 0.3 });
-
-  return (
-    <motion.div
-      ref={ref}
-      className="border-t border-text-muted pt-6"
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <div className="font-display text-5xl md:text-6xl font-bold text-text-primary mb-2">
-        {inView ? value : 0}{suffix}
-      </div>
-      <div className="text-text-secondary text-xs tracking-[0.2em] uppercase">
-        {label}
-      </div>
-    </motion.div>
-  );
-}
+import { stats } from "@/data/portfolio-data";
 
 export default function About() {
-  const { ref: titleRef, inView: titleInView } = useInView();
-  const { ref: textRef, inView: textInView } = useInView();
-  const paragraphs = aboutText.split("\n\n");
-
   return (
-    <section id="about" className="section-full">
-      <div className="w-full max-w-7xl mx-auto">
-        {/* Section label */}
-        <motion.div
-          className="mb-16"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+    <section id="about" className="py-32 md:py-48 px-6 md:px-12 lg:px-16">
+      <div className="max-w-7xl mx-auto">
+        {/* Large statement */}
+        <motion.h2
+          className="text-large font-display font-bold text-fg mb-20 max-w-5xl"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="section-number">01 / ABOUT</span>
-        </motion.div>
+          I craft <span className="font-serif font-normal text-accent">digital experiences</span> that bridge marketing strategy with hands-on technical execution — from fintech apps to executive event platforms.
+        </motion.h2>
 
-        {/* Two column layout */}
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Left: title */}
-          <div ref={titleRef}>
-            <motion.h2
-              className="font-display text-section-title font-bold text-text-primary mb-8"
-              initial={{ opacity: 0, y: 60 }}
-              animate={titleInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Building at the
-              <br />
-              <span className="text-accent">intersection</span>
-            </motion.h2>
-          </div>
-
-          {/* Right: description */}
-          <div ref={textRef} className="space-y-6">
-            {paragraphs.map((p, i) => (
-              <motion.p
-                key={i}
-                className="text-text-secondary text-base leading-[1.8]"
-                initial={{ opacity: 0, y: 30 }}
-                animate={textInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {p}
-              </motion.p>
-            ))}
-          </div>
+        {/* Two columns */}
+        <div className="grid md:grid-cols-2 gap-16 mb-24">
+          <motion.p
+            className="text-fg-secondary text-base leading-[1.8]"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            Currently driving marketing operations and digital product innovation at Resurgent India Limited — a SEBI-registered Category I Merchant Bank. Google-certified in Generative AI &amp; Prompt Engineering.
+          </motion.p>
+          <motion.p
+            className="text-fg-secondary text-base leading-[1.8]"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            My domain expertise spans Merchant Banking, Stressed Asset Resolution, Insolvency &amp; Bankruptcy, Fintech, and M&amp;A Advisory — giving me a unique edge in understanding both the business and the technology.
+          </motion.p>
         </div>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24">
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, i) => (
-            <Counter
+            <motion.div
               key={i}
-              value={stat.value}
-              suffix={stat.suffix}
-              label={stat.label}
-            />
+              className="border-t border-border pt-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.08 }}
+            >
+              <div className="font-display text-5xl md:text-6xl font-bold text-fg">{stat.value}{stat.suffix}</div>
+              <div className="text-fg-muted text-xs tracking-[0.15em] uppercase mt-2">{stat.label}</div>
+            </motion.div>
           ))}
         </div>
       </div>

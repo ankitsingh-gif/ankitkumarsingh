@@ -3,95 +3,73 @@
 import { motion } from "framer-motion";
 import { siteConfig } from "@/data/portfolio-data";
 
-const socialLinks = [
-  { name: "LinkedIn", href: siteConfig.social.linkedin },
-  { name: "GitHub", href: siteConfig.social.github },
-  { name: "WhatsApp", href: siteConfig.social.whatsapp },
-  { name: "Email", href: `mailto:${siteConfig.email}` },
-];
-
 export default function Contact() {
   return (
-    <section id="contact" className="py-32 md:py-48 px-6 md:px-12 lg:px-20 relative">
+    <section id="contact" className="py-32 md:py-48 px-6 md:px-12 lg:px-16">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          className="mb-16"
+        <motion.p
+          className="text-fg-muted text-xs tracking-[0.3em] uppercase mb-12"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <span className="section-number">07 / CONTACT</span>
-        </motion.div>
+          Get in touch
+        </motion.p>
 
-        {/* Large CTA text */}
-        <motion.div
-          initial={{ opacity: 0, y: 80 }}
+        {/* Massive CTA */}
+        <motion.a
+          href={`mailto:${siteConfig.email}`}
+          className="block font-display text-massive font-bold text-fg hover:text-accent transition-colors duration-500 mb-16"
+          data-cursor="pointer"
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="font-display text-hero font-bold text-text-primary mb-8">
-            Let&apos;s
-            <br />
-            <span className="text-accent">connect</span>
-            <span className="text-accent-bright">.</span>
-          </h2>
-        </motion.div>
+          Let&apos;s <span className="font-serif font-normal">talk</span>.
+        </motion.a>
 
-        <motion.p
-          className="text-text-secondary text-lg md:text-xl max-w-xl mb-16 leading-relaxed"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-        >
-          I&apos;m always open to discussing new projects, collaborations, or
-          just having a conversation about marketing, AI, and technology.
-        </motion.p>
-
+        {/* Contact details */}
         <motion.div
-          className="flex flex-col md:flex-row gap-8 md:gap-16 mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        >
-          <a
-            href={`mailto:${siteConfig.email}`}
-            className="magnetic-btn"
-            data-cursor="pointer"
-          >
-            {siteConfig.email}
-          </a>
-          <a
-            href={`tel:${siteConfig.phone}`}
-            className="text-text-secondary hover:text-accent-bright transition-colors duration-500 text-sm tracking-wider self-center"
-            data-cursor="pointer"
-          >
-            {siteConfig.phone}
-          </a>
-        </motion.div>
-
-        {/* Social links */}
-        <motion.div
-          className="flex gap-8"
+          className="grid md:grid-cols-3 gap-8 border-t border-border pt-10"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
+          transition={{ delay: 0.2 }}
         >
-          {socialLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-secondary text-xs tracking-[0.15em] uppercase hover:text-accent-bright transition-colors duration-500"
-              data-cursor="pointer"
-            >
-              {link.name}
+          <div>
+            <p className="text-fg-muted text-xs tracking-wider uppercase mb-2">Email</p>
+            <a href={`mailto:${siteConfig.email}`} className="text-fg text-sm hover:text-accent transition-colors" data-cursor="pointer">
+              {siteConfig.email}
             </a>
-          ))}
+          </div>
+          <div>
+            <p className="text-fg-muted text-xs tracking-wider uppercase mb-2">Phone</p>
+            <a href={`tel:${siteConfig.phone}`} className="text-fg text-sm hover:text-accent transition-colors" data-cursor="pointer">
+              {siteConfig.phone}
+            </a>
+          </div>
+          <div>
+            <p className="text-fg-muted text-xs tracking-wider uppercase mb-2">Socials</p>
+            <div className="flex gap-4">
+              {[
+                { name: "LinkedIn", href: siteConfig.social.linkedin },
+                { name: "GitHub", href: siteConfig.social.github },
+                { name: "WhatsApp", href: siteConfig.social.whatsapp },
+              ].map((l) => (
+                <a
+                  key={l.name}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-fg-secondary text-sm hover:text-accent transition-colors"
+                  data-cursor="pointer"
+                >
+                  {l.name}
+                </a>
+              ))}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
