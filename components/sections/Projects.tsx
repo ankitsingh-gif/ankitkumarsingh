@@ -29,8 +29,8 @@ export default function Projects() {
           <span className="text-accent">work</span>
         </motion.h2>
 
-        {/* Projects - large immersive cards */}
-        <div className="space-y-32">
+        {/* Projects */}
+        <div className="space-y-24">
           {projects.map((project, i) => (
             <motion.a
               key={i}
@@ -39,81 +39,78 @@ export default function Projects() {
               rel="noopener noreferrer"
               className="group block"
               data-cursor="pointer"
-              initial={{ opacity: 0, y: 80 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Project preview area */}
-              <div
-                className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-xl overflow-hidden mb-8"
-                style={{
-                  background: `linear-gradient(135deg, ${project.accentColor}08, ${project.accentColor}03, #0a0a0a)`,
-                }}
-              >
-                {/* Large project number */}
-                <div className="absolute top-6 left-8 font-display text-8xl md:text-[12rem] font-bold opacity-[0.03] text-white leading-none">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
+              {/* Project card */}
+              <div className="border border-border rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-accent">
 
-                {/* Center project name */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span
-                    className="font-display text-3xl md:text-6xl lg:text-7xl font-bold opacity-10 group-hover:opacity-20 transition-all duration-700"
-                    style={{ color: project.accentColor }}
-                  >
-                    {project.name.split("—")[0].trim()}
-                  </span>
-                </div>
+                {/* Preview area with solid dark bg */}
+                <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden" style={{ background: "var(--bg-secondary)" }}>
 
-                {/* Hover glow */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                  style={{
-                    background: `radial-gradient(ellipse at center, ${project.accentColor}08, transparent 70%)`,
-                  }}
-                />
+                  {/* Large number watermark */}
+                  <div className="absolute top-6 left-8 font-display text-8xl md:text-[10rem] font-bold text-text-primary opacity-[0.04] leading-none select-none">
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
 
-                {/* Border that appears on hover */}
-                <div
-                  className="absolute inset-0 rounded-xl border border-transparent group-hover:border-opacity-100 transition-all duration-700"
-                  style={{ borderColor: `${project.accentColor}20` }}
-                />
-
-                {/* Arrow indicator */}
-                <div className="absolute bottom-6 right-8 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke={project.accentColor}
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7v10" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Project info */}
-              <div className="grid md:grid-cols-12 gap-6">
-                <div className="md:col-span-6">
-                  <h3 className="font-display text-2xl md:text-3xl font-bold text-text-primary group-hover:text-accent-bright transition-colors duration-500">
-                    {project.name}
-                  </h3>
-                </div>
-                <div className="md:col-span-4">
-                  <p className="text-text-secondary text-sm leading-relaxed">
-                    {project.description.slice(0, 150)}...
-                  </p>
-                </div>
-                <div className="md:col-span-2 flex flex-wrap gap-2 md:justify-end">
-                  {project.techStack.slice(0, 3).map((tech) => (
+                  {/* Center project name watermark */}
+                  <div className="absolute inset-0 flex items-center justify-center px-8">
                     <span
-                      key={tech}
-                      className="text-text-muted text-xs tracking-wider"
+                      className="font-display text-2xl md:text-5xl lg:text-6xl font-bold text-text-primary opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-700 select-none text-center"
                     >
-                      {tech}
+                      {project.name.split("—")[0].trim()}
                     </span>
-                  ))}
+                  </div>
+
+                  {/* Colored accent gradient on hover */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                    style={{
+                      background: `radial-gradient(ellipse at 70% 50%, ${project.accentColor}18, transparent 70%)`,
+                    }}
+                  />
+
+                  {/* Arrow */}
+                  <div className="absolute bottom-5 right-6 flex items-center gap-2 text-text-muted group-hover:text-accent transition-all duration-500 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100">
+                    <span className="text-xs tracking-wider uppercase">View Project</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7v10" />
+                    </svg>
+                  </div>
+
+                  {/* Tech stack pills inside preview */}
+                  <div className="absolute bottom-5 left-6 flex flex-wrap gap-2">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-3 py-1 text-[10px] tracking-wider uppercase rounded-full border border-border text-text-muted bg-void/50 backdrop-blur-sm"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Info area below preview */}
+                <div className="px-6 md:px-8 py-6 md:py-8">
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="font-display text-xl md:text-2xl font-bold text-text-primary group-hover:text-accent transition-colors duration-300 mb-2">
+                        {project.name}
+                      </h3>
+                      <p className="text-text-secondary text-sm leading-relaxed max-w-xl">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    {/* Accent color indicator */}
+                    <div
+                      className="w-3 h-3 rounded-full shrink-0 mt-2"
+                      style={{ backgroundColor: project.accentColor }}
+                    />
+                  </div>
                 </div>
               </div>
             </motion.a>
