@@ -22,7 +22,7 @@ export default function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          I craft <span className="gradient-text">digital experiences</span> that bridge marketing strategy with hands-on technical execution.
+          I craft <span className="gradient-text">digital experiences</span> that bridge marketing strategy with <span className="gradient-text-reverse">technical execution</span>.
         </motion.h2>
 
         {/* Two column text */}

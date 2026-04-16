@@ -25,9 +25,9 @@ function MainShape() {
       <mesh ref={ref} scale={1.6}>
         <torusKnotGeometry args={[1, 0.35, 128, 32, 2, 3]} />
         <MeshDistortMaterial
-          color="#7c3aed"
-          emissive="#4f46e5"
-          emissiveIntensity={0.15}
+          color="#6C63FF"
+          emissive="#00D4AA"
+          emissiveIntensity={0.12}
           roughness={0.2}
           metalness={0.8}
           distort={0.2}
@@ -65,11 +65,11 @@ function FloatingOrbs() {
   });
 
   const orbs = [
-    { pos: [2.2, 0.8, 0] as [number, number, number], color: "#4f46e5", size: 0.12 },
-    { pos: [-1.8, -1.2, 0.5] as [number, number, number], color: "#ec4899", size: 0.09 },
-    { pos: [0.5, 2, -0.8] as [number, number, number], color: "#f59e0b", size: 0.08 },
-    { pos: [-2, 0.5, -0.3] as [number, number, number], color: "#10b981", size: 0.1 },
-    { pos: [1.5, -1.5, 0.8] as [number, number, number], color: "#6366f1", size: 0.07 },
+    { pos: [2.2, 0.8, 0] as [number, number, number], color: "#6C63FF", size: 0.12 },
+    { pos: [-1.8, -1.2, 0.5] as [number, number, number], color: "#00D4AA", size: 0.09 },
+    { pos: [0.5, 2, -0.8] as [number, number, number], color: "#8B83FF", size: 0.08 },
+    { pos: [-2, 0.5, -0.3] as [number, number, number], color: "#33DFBB", size: 0.1 },
+    { pos: [1.5, -1.5, 0.8] as [number, number, number], color: "#6C63FF", size: 0.07 },
   ];
 
   return (
@@ -89,12 +89,12 @@ function Scene() {
     <>
       <ambientLight intensity={0.4} />
       <directionalLight position={[5, 5, 5]} intensity={1} color="#ffffff" />
-      <pointLight position={[-3, 2, 4]} intensity={0.6} color="#7c3aed" />
-      <pointLight position={[3, -2, 2]} intensity={0.4} color="#ec4899" />
+      <pointLight position={[-3, 2, 4]} intensity={0.6} color="#6C63FF" />
+      <pointLight position={[3, -2, 2]} intensity={0.4} color="#00D4AA" />
 
       <MainShape />
-      <OrbitRing radius={2.5} speed={0.15} color="#7c3aed" opacity={0.15} />
-      <OrbitRing radius={3.0} speed={-0.1} color="#ec4899" opacity={0.08} />
+      <OrbitRing radius={2.5} speed={0.15} color="#6C63FF" opacity={0.15} />
+      <OrbitRing radius={3.0} speed={-0.1} color="#00D4AA" opacity={0.1} />
       <FloatingOrbs />
     </>
   );

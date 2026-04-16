@@ -17,6 +17,9 @@ const config: Config = {
         accent: "var(--accent)",
         "accent-light": "var(--accent-light)",
         "accent-bg": "var(--accent-bg)",
+        mint: "var(--mint)",
+        "mint-light": "var(--mint-light)",
+        "mint-bg": "var(--mint-bg)",
         border: "var(--border)",
       },
       fontFamily: {

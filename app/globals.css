@@ -6,12 +6,15 @@
   --bg: #fafaf8;
   --bg-card: #ffffff;
   --fg: #1a1a1a;
-  --fg-secondary: #666;
-  --fg-muted: #bbb;
-  --accent: #4f46e5;
-  --accent-light: #818cf8;
-  --accent-bg: #eef2ff;
-  --border: #e5e5e5;
+  --fg-secondary: #555;
+  --fg-muted: #999;
+  --accent: #6C63FF;
+  --accent-light: #8B83FF;
+  --accent-bg: #F0EEFF;
+  --mint: #00D4AA;
+  --mint-light: #33DFBB;
+  --mint-bg: #E6FAF5;
+  --border: #E8E8E8;
   --shadow: rgba(0,0,0,0.06);
 }
 
@@ -36,10 +39,40 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent), #7c3aed, #ec4899);
+  background: linear-gradient(135deg, var(--accent), var(--mint));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Gradient text reverse */
+.gradient-text-reverse {
+  background: linear-gradient(135deg, var(--mint), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  background: linear-gradient(90deg, var(--accent), var(--mint));
+}
+
+/* Gradient border */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--accent), var(--mint));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Card hover */

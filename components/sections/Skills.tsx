@@ -38,7 +38,7 @@ export default function Skills() {
           <div className="animate-marquee whitespace-nowrap">
             {skillCategories.flatMap(c => c.skills).concat(skillCategories.flatMap(c => c.skills)).map((s, i) => (
               <span key={i} className="inline-block mx-4 text-fg-muted text-lg md:text-xl font-display font-medium">
-                {s} <span className="text-accent mx-2">·</span>
+                {s} <span className={`mx-2 ${i % 2 === 0 ? "text-accent" : "text-mint"}`}>·</span>
               </span>
             ))}
           </div>

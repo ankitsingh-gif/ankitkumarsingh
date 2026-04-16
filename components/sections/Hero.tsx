@@ -42,7 +42,7 @@ export default function Hero() {
     <section id="home" className="min-h-screen flex items-center pt-20 pb-16 px-6 md:px-10 relative overflow-hidden">
       {/* Background blobs */}
       <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-mint/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
         {/* ===== LEFT — Text (never overlapped) ===== */}
@@ -87,8 +87,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
           >
-            Building at the intersection of <strong className="text-fg">Marketing</strong>,{" "}
-            <strong className="text-fg">AI</strong> &amp;{" "}
+            Building at the intersection of <strong className="text-accent">Marketing</strong>,{" "}
+            <strong className="text-mint">AI</strong> &amp;{" "}
             <strong className="text-fg">Technology</strong> at Resurgent India Limited.
           </motion.p>
 
@@ -111,7 +111,7 @@ export default function Hero() {
 
           {/* Stats */}
           <motion.div
-            className="flex gap-8 mt-12"
+            className="flex gap-8 mt-12 pt-8 border-t border-border"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
@@ -120,10 +120,13 @@ export default function Hero() {
               { n: "6+", l: "Years Exp." },
               { n: "3", l: "Products" },
               { n: "1K+", l: "Campaigns" },
-            ].map((s) => (
-              <div key={s.l}>
-                <div className="font-display text-2xl font-bold text-fg">{s.n}</div>
-                <div className="text-fg-muted text-xs">{s.l}</div>
+            ].map((s, i) => (
+              <div key={s.l} className="flex gap-4 items-center">
+                {i > 0 && <div className="w-px h-8 bg-border -ml-4" />}
+                <div>
+                  <div className="font-display text-2xl font-bold gradient-text">{s.n}</div>
+                  <div className="text-fg-muted text-xs">{s.l}</div>
+                </div>
               </div>
             ))}
           </motion.div>

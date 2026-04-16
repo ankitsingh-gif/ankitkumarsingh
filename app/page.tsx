@@ -2,6 +2,7 @@
 
 import Preloader from "@/components/ui/Preloader";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -18,6 +19,7 @@ export default function Home() {
     <>
       <Preloader />
       <SmoothScroll />
+      <ScrollProgress />
 
       <Navbar />
       <main>
