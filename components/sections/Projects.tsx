@@ -17,9 +17,9 @@ export default function Projects() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <motion.a key={i} href={project.url} target="_blank" rel="noopener noreferrer" className="card overflow-hidden group block" data-cursor="pointer" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: i * 0.12 }}>
-              <div className="h-44 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${project.accentColor}18, #12121A)` }}>
+              <div className="h-44 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${project.accentColor}15, #f0f0f0)` }}>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-display text-7xl font-bold text-white/[0.03] group-hover:text-white/[0.08] transition-all duration-500">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-display text-7xl font-bold text-[#1a1a1a]/[0.06] group-hover:text-[#1a1a1a]/[0.12] transition-all duration-500">{String(i + 1).padStart(2, "0")}</span>
                 </div>
                 <div className="absolute bottom-4 right-4 w-9 h-9 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:-translate-y-1" style={{ background: "var(--gradient)" }}>
                   <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7v10" /></svg>
