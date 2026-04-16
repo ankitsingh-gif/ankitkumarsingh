@@ -18,16 +18,21 @@ export default function Home() {
     <>
       <Preloader />
       <SmoothScroll />
-
       <Navbar />
       <main>
         <Hero />
+        <div className="gradient-line mx-6 md:mx-10" />
         <About />
+        <div className="gradient-line mx-6 md:mx-10" />
         <Experience />
+        <div className="gradient-line mx-6 md:mx-10" />
         <Projects />
+        <div className="gradient-line mx-6 md:mx-10" />
         <Skills />
+        <div className="gradient-line mx-6 md:mx-10" />
         <Certifications />
         <Education />
+        <div className="gradient-line mx-6 md:mx-10" />
         <Contact />
       </main>
       <Footer />

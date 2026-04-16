@@ -10,17 +10,18 @@ const config: Config = {
     extend: {
       colors: {
         bg: "var(--bg)",
+        "bg-dark": "var(--bg-dark)",
         "bg-card": "var(--bg-card)",
+        accent: "var(--accent)",
+        "accent-dim": "var(--accent-dim)",
         fg: "var(--fg)",
         "fg-secondary": "var(--fg-secondary)",
         "fg-muted": "var(--fg-muted)",
-        accent: "var(--accent)",
-        "accent-light": "var(--accent-light)",
-        "accent-bg": "var(--accent-bg)",
         border: "var(--border)",
+        glow: "var(--glow)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
         display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
       },
     },
