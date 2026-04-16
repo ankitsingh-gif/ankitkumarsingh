@@ -5,30 +5,24 @@ import { projects } from "@/data/portfolio-data";
 
 export default function Projects() {
   return (
-    <section id="projects" className="section-dark">
+    <section id="projects" className="section">
       <div className="max-w-7xl mx-auto">
-        <motion.div className="flex items-center gap-3 mb-12"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-          <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-          <span className="text-accent text-sm font-semibold tracking-wider uppercase">Projects</span>
+        <motion.div className="flex items-center gap-3 mb-4" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+          <div className="w-2 h-2 rounded-full" style={{ background: "var(--gradient)" }} />
+          <span className="gradient-text text-sm font-semibold tracking-wider uppercase">Projects</span>
         </motion.div>
-        <motion.h2 className="font-display text-3xl md:text-4xl font-bold text-fg mb-16"
-          initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <motion.h2 className="font-display text-3xl md:text-4xl font-bold text-fg mb-16" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
           Things I&apos;ve built
         </motion.h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
-            <motion.a key={i} href={project.url} target="_blank" rel="noopener noreferrer"
-              className="card-dark overflow-hidden group block"
-              initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.12 }}>
-              <div className="h-44 relative overflow-hidden"
-                style={{ background: `linear-gradient(135deg, ${project.accentColor}15, ${project.accentColor}05, var(--bg-card))` }}>
+            <motion.a key={i} href={project.url} target="_blank" rel="noopener noreferrer" className="card overflow-hidden group block" data-cursor="pointer" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: i * 0.12 }}>
+              <div className="h-44 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${project.accentColor}18, #12121A)` }}>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-display text-6xl font-bold text-fg/[0.03] group-hover:text-fg/[0.08] transition-all duration-500 select-none">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-display text-7xl font-bold text-white/[0.03] group-hover:text-white/[0.08] transition-all duration-500">{String(i + 1).padStart(2, "0")}</span>
                 </div>
-                <div className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-accent/0 group-hover:bg-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                  <svg className="w-3.5 h-3.5 text-bg-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                <div className="absolute bottom-4 right-4 w-9 h-9 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:-translate-y-1" style={{ background: "var(--gradient)" }}>
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                 </div>
               </div>
               <div className="p-6">
