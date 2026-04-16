@@ -9,16 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "var(--bg)",
-        "bg-dark": "var(--bg-dark)",
-        "bg-card": "var(--bg-card)",
-        accent: "var(--accent)",
-        "accent-dim": "var(--accent-dim)",
-        fg: "var(--fg)",
-        "fg-secondary": "var(--fg-secondary)",
-        "fg-muted": "var(--fg-muted)",
-        border: "var(--border)",
-        glow: "var(--glow)",
+        bg: "#0A0A0F",
+        "bg-card": "#12121A",
+        accent: "#6C63FF",
+        accent2: "#00D4AA",
+        fg: "#F5F5F7",
+        "fg-secondary": "#A1A1AA",
+        "fg-muted": "#52525B",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
