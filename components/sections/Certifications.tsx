@@ -20,7 +20,7 @@ export default function Certifications() {
               </div>
               <div>
                 <h4 className="text-fg text-sm font-semibold group-hover:text-accent transition-colors">{cert.name}</h4>
-                <p className="text-fg-muted text-xs mt-1">{cert.issuer} \u00b7 {cert.date}</p>
+                <p className="text-fg-muted text-xs mt-1">{cert.issuer} · {cert.date}</p>
               </div>
             </motion.div>
           ))}
@@ -28,7 +28,7 @@ export default function Certifications() {
         <div className="grid md:grid-cols-2 gap-4">
           {education.map((edu, i) => (
             <motion.div key={i} className="card p-6 flex gap-4" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--gradient)" }}><span className="text-white text-lg">\ud83c\udf93</span></div>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--gradient)" }}><span className="text-white text-lg">🎓</span></div>
               <div>
                 <h4 className="text-fg font-display font-bold">{edu.degree}</h4>
                 <p className="text-fg-secondary text-sm mt-1">{edu.institution}</p>

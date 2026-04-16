@@ -20,7 +20,7 @@ export default function Skills() {
       <div className="mb-16 overflow-hidden py-5 border-y border-[rgba(108,99,255,0.08)]">
         <div className="animate-marquee whitespace-nowrap">
           {[...marqueeSkills, ...marqueeSkills].map((s, i) => (
-            <span key={i} className="inline-block mx-5 text-fg-muted text-xl md:text-2xl font-display font-semibold">{s} <span className="gradient-text mx-3">\u00b7</span></span>
+            <span key={i} className="inline-block mx-5 text-fg-muted text-xl md:text-2xl font-display font-semibold">{s} <span className="gradient-text mx-3">·</span></span>
           ))}
         </div>
       </div>

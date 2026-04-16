@@ -17,7 +17,7 @@ export default function Footer() {
             <a key={l.href} href={l.href} className="text-fg-muted text-sm hover:text-accent transition-colors">{l.label}</a>
           ))}
         </div>
-        <a href="#home" className="text-fg-muted text-sm hover:text-accent transition-colors">\u2191 Back to top</a>
+        <a href="#home" className="text-fg-muted text-sm hover:text-accent transition-colors">↑ Back to top</a>
       </div>
     </footer>
   );
