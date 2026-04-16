@@ -18,10 +18,10 @@ export default function About() {
         </motion.h2>
         <div className="grid md:grid-cols-2 gap-10 mb-20">
           <motion.p className="text-fg-secondary text-base leading-[1.85]" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            Currently driving marketing operations and digital product innovation at Resurgent India Limited \u2014 a SEBI-registered Category I Merchant Bank. Google-certified in Generative AI & Prompt Engineering.
+            Currently driving marketing operations and digital product innovation at Resurgent India Limited — a SEBI-registered Category I Merchant Bank. Google-certified in Generative AI &amp; Prompt Engineering.
           </motion.p>
           <motion.p className="text-fg-secondary text-base leading-[1.85]" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-            My domain expertise spans Merchant Banking, Stressed Asset Resolution, Insolvency & Bankruptcy, Fintech, and M&A Advisory \u2014 giving me a unique edge in both business and technology.
+            My domain expertise spans Merchant Banking, Stressed Asset Resolution, Insolvency &amp; Bankruptcy, Fintech, and M&amp;A Advisory — giving me a unique edge in both business and technology.
           </motion.p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0A0A0F;
-  --bg-card: #12121A;
+  --bg: #fafaf8;
+  --bg-card: #ffffff;
   --accent: #6C63FF;
   --accent2: #00D4AA;
-  --fg: #F5F5F7;
-  --fg-secondary: #A1A1AA;
-  --fg-muted: #52525B;
-  --border: rgba(108,99,255,0.15);
-  --glow: rgba(108,99,255,0.2);
+  --fg: #1a1a1a;
+  --fg-secondary: #555;
+  --fg-muted: #999;
+  --border: rgba(108,99,255,0.12);
+  --glow: rgba(108,99,255,0.15);
   --gradient: linear-gradient(135deg, #6C63FF, #00D4AA);
 }
 
@@ -30,13 +30,13 @@ body {
 
 ::selection { background: var(--accent); color: white; }
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--fg-muted); border-radius: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
 
 .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 9998; background: var(--gradient); transform-origin: left; }
 
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-.card:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--glow), 0 15px 40px rgba(0,0,0,0.4); transform: translateY(-6px); }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.card:hover { border-color: var(--accent); box-shadow: 0 0 20px var(--glow), 0 12px 30px rgba(0,0,0,0.08); transform: translateY(-6px); }
 
 .gradient-text { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
@@ -65,13 +65,13 @@ body {
 .section { padding: 7rem 1.5rem; position: relative; }
 @media (min-width: 768px) { .section { padding: 9rem 2.5rem; } }
 
-.canvas-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.canvas-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.08; }
 
 @media (min-width: 769px) {
   body { cursor: none; }
   .cursor-dot { position: fixed; top: 0; left: 0; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.05s; }
-  .cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1.5px solid rgba(108,99,255,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: all 0.15s ease-out; }
-  .cursor-ring.hovering { width: 64px; height: 64px; border-color: var(--accent); background: rgba(108,99,255,0.05); }
+  .cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1.5px solid rgba(108,99,255,0.3); border-radius: 50%; pointer-events: none; z-index: 9998; transition: all 0.15s ease-out; }
+  .cursor-ring.hovering { width: 64px; height: 64px; border-color: var(--accent); background: rgba(108,99,255,0.03); }
 }
 @media (max-width: 768px) { .cursor-dot, .cursor-ring { display: none; } }
 

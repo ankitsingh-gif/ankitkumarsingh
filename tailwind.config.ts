@@ -9,13 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#0A0A0F",
-        "bg-card": "#12121A",
+        bg: "#fafaf8",
+        "bg-card": "#ffffff",
         accent: "#6C63FF",
         accent2: "#00D4AA",
-        fg: "#F5F5F7",
-        "fg-secondary": "#A1A1AA",
-        "fg-muted": "#52525B",
+        fg: "#1a1a1a",
+        "fg-secondary": "#555",
+        "fg-muted": "#999",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],

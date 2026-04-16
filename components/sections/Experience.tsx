@@ -32,7 +32,7 @@ export default function Experience() {
                   <p className="text-accent/70 text-sm font-medium mb-4">{entry.company}</p>
                   <ul className="space-y-2">
                     {entry.highlights.slice(0, 3).map((h, j) => (
-                      <li key={j} className="flex gap-3 text-fg-secondary text-sm leading-relaxed"><span className="text-accent mt-0.5 shrink-0">\u25b8</span>{h}</li>
+                      <li key={j} className="flex gap-3 text-fg-secondary text-sm leading-relaxed"><span className="text-accent mt-0.5 shrink-0">▸</span>{h}</li>
                     ))}
                   </ul>
                 </div>
