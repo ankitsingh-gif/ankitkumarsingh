@@ -90,51 +90,103 @@ export const experience: ExperienceEntry[] = [
 
 export interface Project {
   name: string;
+  tagline: string;
   url: string;
   description: string;
+  problem: string;
+  solution: string;
+  benefits: string[];
   techStack: string[];
   accentColor: string;
+  accentColor2: string;
+  category: string;
+  icon: string;
+  featured?: boolean;
+  stats?: { value: string; label: string }[];
 }
 
 export const projects: Project[] = [
   {
-    name: "Resurgent Events Platform",
-    url: "https://resurgentevents.com",
-    description:
-      "Full-stack event management platform for Resurgent India's executive roundtables and weekly webinars. Features dynamic event listings with rich descriptions, online registration, WhatsApp and email integration, and a responsive modern UI. Serves as the primary event engagement hub for industry leaders and C-suite decision-makers.",
-    techStack: ["Next.js", "React", "Tailwind CSS", "Vercel"],
-    accentColor: "#00E5FF",
-  },
-  {
-    name: "Resurgent India — Corporate Website Redesign",
-    url: "https://resurgent-website.vercel.app",
-    description:
-      "Complete digital transformation of a SEBI-registered Category I Merchant Bank's web presence. Features dynamic 3D visual elements, an admin panel for content management, an AI-powered chatbot for visitor engagement, a webinar/roundtable section, and a weekly M&A opportunities feed. Design benchmarked against BCG India and McKinsey India.",
-    techStack: [
-      "Next.js",
-      "React",
-      "Three.js",
-      "AI Chatbot",
-      "Admin Panel",
-      "Database",
-      "Vercel",
-    ],
-    accentColor: "#FFD700",
-  },
-  {
-    name: "DebtGoFlow — Financial Debt Tracker",
+    name: "DebtGoFlow",
+    tagline: "Escape the debt spiral — one smart step at a time.",
     url: "https://financial-debt.vercel.app",
     description:
-      "A fintech web application designed to help users navigate complex multi-lender debt situations. Features multi-lender debt tracking, EMI cashflow waterfall projections, prioritized repayment strategies, lender negotiation scripts, and actionable step-by-step debt freedom plans.",
-    techStack: [
-      "Next.js",
-      "React",
-      "Vercel",
-      "Financial Engine",
-      "Data Modeling",
-      "UI/UX",
+      "A clarity-first fintech web app that turns messy multi-lender debt into a clear, actionable repayment journey.",
+    problem:
+      "Millions struggle with overlapping EMIs, unclear payoff paths, and anxiety about which lender to pay first — leading to rising interest and missed deadlines.",
+    solution:
+      "DebtGoFlow brings every loan, EMI, and lender into one dashboard. It projects cashflow waterfalls, suggests the smartest repayment order, and gives ready-to-use negotiation scripts to reduce interest.",
+    benefits: [
+      "Visualize every EMI on a single timeline — no more spreadsheets",
+      "Smart prioritization reduces total interest paid",
+      "Negotiation scripts help renegotiate rates with lenders",
+      "Step-by-step debt-freedom roadmap with progress tracking",
     ],
+    techStack: ["Next.js", "React", "TypeScript", "Vercel", "Financial Engine", "Data Modeling"],
     accentColor: "#2E86C1",
+    accentColor2: "#6C63FF",
+    category: "Fintech Web App",
+    icon: "DEBT",
+    featured: true,
+    stats: [
+      { value: "Multi", label: "Lender Support" },
+      { value: "Smart", label: "Prioritization" },
+      { value: "1-Tap", label: "Negotiation Scripts" },
+    ],
+  },
+  {
+    name: "Resurgent Events",
+    tagline: "Where C-suite conversations happen.",
+    url: "https://resurgentevents.com",
+    description:
+      "The executive engagement hub powering Resurgent India's roundtables and weekly industry webinars.",
+    problem:
+      "Fragmented registrations, scattered event info, and manual follow-ups made C-suite engagement slow and inconsistent.",
+    solution:
+      "A full-stack event platform with dynamic listings, instant online registration, WhatsApp + email integration, and a polished responsive UI built for decision-makers.",
+    benefits: [
+      "Higher registration conversions with frictionless signup",
+      "WhatsApp integration for instant engagement",
+      "Centralized hub for all executive events",
+      "Faster turnaround from event idea to launch",
+    ],
+    techStack: ["Next.js", "React", "Tailwind CSS", "Vercel"],
+    accentColor: "#00D4AA",
+    accentColor2: "#00E5FF",
+    category: "Event Platform",
+    icon: "EVENTS",
+    stats: [
+      { value: "C-Suite", label: "Audience" },
+      { value: "WhatsApp", label: "Integration" },
+      { value: "Live", label: "Event Listings" },
+    ],
+  },
+  {
+    name: "Resurgent India Corporate",
+    tagline: "A merchant bank's digital flagship, redesigned.",
+    url: "https://resurgent-website.vercel.app",
+    description:
+      "Complete digital transformation for a SEBI-registered Category I Merchant Bank — benchmarked against BCG & McKinsey India.",
+    problem:
+      "A legacy corporate site that didn't reflect the bank's stature, lacked content management, and couldn't engage modern visitors.",
+    solution:
+      "End-to-end redesign with dynamic 3D hero visuals, an AI chatbot for visitor queries, admin panel for content, webinar section, and a weekly M&A opportunities feed.",
+    benefits: [
+      "Modern 3D visual identity that matches tier-1 consulting firms",
+      "AI chatbot handles visitor queries 24/7",
+      "Admin panel lets marketing update content without devs",
+      "Weekly M&A feed drives return visits from deal-makers",
+    ],
+    techStack: ["Next.js", "React", "Three.js", "AI Chatbot", "Admin Panel", "Database"],
+    accentColor: "#6C63FF",
+    accentColor2: "#FFD700",
+    category: "Corporate Website",
+    icon: "RESUR",
+    stats: [
+      { value: "3D", label: "Hero Visuals" },
+      { value: "AI", label: "Chatbot" },
+      { value: "Weekly", label: "M&A Feed" },
+    ],
   },
 ];
 
