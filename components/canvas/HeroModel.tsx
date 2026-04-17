@@ -6,27 +6,80 @@ import { Float, AdaptiveDpr, ContactShadows, RoundedBox } from "@react-three/dre
 import * as THREE from "three";
 
 /* =========================================================================
- * PROFESSIONAL 3D CHARACTER ROBOT — matching reference
- * Dark navy/teal body, dome head, dual antennas, chest screen, legs
+ * CHARACTER ROBOT — exact match to reference
+ * Big round blue-purple head, two glowing eyes, pointing finger, stubby legs
  * =======================================================================*/
 
 const COLORS = {
-  body: "#3d4c6e",        // main navy teal
-  bodyDark: "#2a3550",    // shadows
-  bodyLight: "#5467a0",   // highlights/panels
-  metallic: "#7a88b0",    // bright metallic edges
-  joint: "#1a2238",       // dark joints
-  cyan: "#4ae8ff",        // cyan glow (eyes, chest)
-  yellow: "#ffdc4a",      // antenna tips
-  pink: "#ff6b9d",        // ear accents
-  white: "#e8ecf5",       // panel inserts
+  body: "#5a6ba0",        // medium blue-purple — main body
+  bodyLight: "#7a8bc0",   // highlights / top light
+  bodyDark: "#34406a",    // deep shadow / inner panels
+  panel: "#1a2340",       // dark panel recesses
+  joint: "#222b4a",       // joints
+  cyan: "#5eeaff",        // bright cyan glow
+  cyanDim: "#3ab8d8",     // dimmer cyan
+  yellow: "#ffdb4a",      // yellow antenna tip
+  pink: "#ff86ad",        // pink ear accent
+  white: "#f0f3ff",       // highlights
 };
 
-/* ---------- DOME HEAD ---------- */
+/* ---------- SPEAKER-GRID EYE ----------
+   Outer housing + inner dark grid + bright pupil + highlight
+-------------------------------------------------------------*/
+function SpeakerEye({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      {/* Outer housing ring */}
+      <mesh castShadow>
+        <cylinderGeometry args={[0.25, 0.25, 0.08, 40]} />
+        <meshPhysicalMaterial color={COLORS.bodyLight} metalness={0.5} roughness={0.3} clearcoat={0.9} />
+      </mesh>
+
+      {/* Dark recessed inner */}
+      <mesh position={[0, 0.045, 0]}>
+        <cylinderGeometry args={[0.22, 0.22, 0.03, 40]} />
+        <meshPhysicalMaterial color={COLORS.panel} metalness={0.7} roughness={0.25} />
+      </mesh>
+
+      {/* Grid dots — small circles in a ring pattern */}
+      {Array.from({ length: 16 }).map((_, i) => {
+        const angle = (i / 16) * Math.PI * 2;
+        const r = 0.17;
+        return (
+          <mesh
+            key={i}
+            position={[Math.cos(angle) * r, 0.063, Math.sin(angle) * r]}
+          >
+            <cylinderGeometry args={[0.012, 0.012, 0.005, 8]} />
+            <meshBasicMaterial color={COLORS.panel} />
+          </mesh>
+        );
+      })}
+
+      {/* Inner pupil — bright cyan core */}
+      <mesh position={[0, 0.065, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.11, 32]} />
+        <meshBasicMaterial color={COLORS.cyan} toneMapped={false} />
+      </mesh>
+
+      {/* Pupil glow aura */}
+      <mesh position={[0, 0.062, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.16, 32]} />
+        <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.35} toneMapped={false} />
+      </mesh>
+
+      {/* Specular highlight */}
+      <mesh position={[-0.04, 0.068, -0.035]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.035, 16]} />
+        <meshBasicMaterial color={COLORS.white} toneMapped={false} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ---------- HEAD ---------- */
 function RobotHead() {
   const head = useRef<THREE.Group>(null);
-  const pupilL = useRef<THREE.Mesh>(null);
-  const pupilR = useRef<THREE.Mesh>(null);
   const antennaL = useRef<THREE.Group>(null);
   const antennaR = useRef<THREE.Group>(null);
   const tipL = useRef<THREE.Mesh>(null);
@@ -34,149 +87,102 @@ function RobotHead() {
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-
-    // Head tilt follows pointer + subtle idle
     if (head.current) {
       const p = state.pointer;
-      head.current.rotation.y = p.x * 0.2 + Math.sin(t * 0.5) * 0.04;
-      head.current.rotation.x = -p.y * 0.1 + Math.sin(t * 0.7) * 0.02;
-      head.current.rotation.z = Math.sin(t * 0.9) * 0.02;
+      head.current.rotation.y = p.x * 0.18 + Math.sin(t * 0.6) * 0.04;
+      head.current.rotation.x = -p.y * 0.08;
+      head.current.rotation.z = Math.sin(t * 0.8) * 0.03;
     }
-
-    // Eye pupils look around
-    const look = Math.sin(t * 0.8) * 0.025;
-    if (pupilL.current) pupilL.current.position.x = -0.26 + look;
-    if (pupilR.current) pupilR.current.position.x = 0.26 + look;
-
-    // Antenna wiggle
-    if (antennaL.current) antennaL.current.rotation.z = 0.25 + Math.sin(t * 3) * 0.08;
-    if (antennaR.current) antennaR.current.rotation.z = -0.25 + Math.sin(t * 3 + 0.4) * 0.08;
-
-    // Antenna tips pulse between yellow and cyan
+    if (antennaL.current) antennaL.current.rotation.z = 0.22 + Math.sin(t * 3) * 0.1;
+    if (antennaR.current) antennaR.current.rotation.z = -0.22 + Math.sin(t * 3 + 0.5) * 0.1;
     if (tipL.current) {
-      const mat = tipL.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 0.8 + Math.sin(t * 3.5) * 0.5;
+      const m = tipL.current.material as THREE.MeshStandardMaterial;
+      m.emissiveIntensity = 1 + Math.sin(t * 3) * 0.5;
     }
     if (tipR.current) {
-      const mat = tipR.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 0.8 + Math.sin(t * 3.5 + 1) * 0.5;
+      const m = tipR.current.material as THREE.MeshStandardMaterial;
+      m.emissiveIntensity = 1 + Math.sin(t * 3.5 + 1) * 0.5;
     }
   });
 
   return (
-    <group ref={head} position={[0, 1.1, 0]}>
-      {/* ===== DOME — flattened oval sphere ===== */}
-      <mesh castShadow scale={[1.15, 1, 1.1]}>
-        <sphereGeometry args={[0.95, 48, 48]} />
+    <group ref={head} position={[0, 1.35, 0]}>
+      {/* Main round head — sphere slightly wider than tall */}
+      <mesh castShadow scale={[1.1, 1.02, 1.05]}>
+        <sphereGeometry args={[1, 64, 64]} />
         <meshPhysicalMaterial
           color={COLORS.body}
-          metalness={0.45}
+          metalness={0.3}
           roughness={0.35}
-          clearcoat={0.9}
-          clearcoatRoughness={0.15}
+          clearcoat={1}
+          clearcoatRoughness={0.12}
         />
       </mesh>
 
-      {/* Subtle dark bottom cap (chin area) */}
-      <mesh position={[0, -0.5, 0]}>
-        <cylinderGeometry args={[0.8, 0.75, 0.15, 32]} />
-        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.4} />
+      {/* Top panel seam line */}
+      <mesh position={[0, 0.7, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.55, 0.012, 10, 40]} />
+        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.3} />
       </mesh>
 
-      {/* ===== LEFT EYE (speaker-grill housing) ===== */}
-      <group position={[-0.33, 0.02, 0.78]}>
-        {/* Outer ring */}
-        <mesh castShadow>
-          <cylinderGeometry args={[0.3, 0.3, 0.12, 32]} />
-          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.6} roughness={0.3} />
-        </mesh>
-        {/* Inner recessed black ring */}
-        <mesh position={[0, 0.063, 0]}>
-          <cylinderGeometry args={[0.26, 0.26, 0.01, 32]} />
-          <meshPhysicalMaterial color="#0a0e1a" metalness={0.8} roughness={0.2} />
-        </mesh>
-        {/* Eye glow base */}
-        <mesh position={[0, 0.07, 0]}>
-          <circleGeometry args={[0.22, 32]} />
-          <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.4} toneMapped={false} />
-        </mesh>
-        {/* Bright pupil */}
-        <mesh ref={pupilL} position={[-0.26, 0.072, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.14, 32]} />
-          <meshBasicMaterial color={COLORS.cyan} toneMapped={false} />
-        </mesh>
-        {/* White highlight */}
-        <mesh position={[-0.21, 0.074, 0.03]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.04, 16]} />
-          <meshBasicMaterial color="#ffffff" toneMapped={false} />
-        </mesh>
+      {/* Front panel horizontal seam */}
+      <mesh position={[0, -0.35, 0.95]} rotation={[0, 0, 0]}>
+        <boxGeometry args={[1.3, 0.012, 0.01]} />
+        <meshPhysicalMaterial color={COLORS.bodyDark} />
+      </mesh>
+
+      {/* Eyes placed on front face */}
+      <group position={[0, 0.05, 0.93]} rotation={[0.05, 0, 0]}>
+        <SpeakerEye position={[-0.36, 0, 0]} />
+        <SpeakerEye position={[0.36, 0, 0]} />
       </group>
 
-      {/* ===== RIGHT EYE ===== */}
-      <group position={[0.33, 0.02, 0.78]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.3, 0.3, 0.12, 32]} />
-          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.6} roughness={0.3} />
-        </mesh>
-        <mesh position={[0, 0.063, 0]}>
-          <cylinderGeometry args={[0.26, 0.26, 0.01, 32]} />
-          <meshPhysicalMaterial color="#0a0e1a" metalness={0.8} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, 0.07, 0]}>
-          <circleGeometry args={[0.22, 32]} />
-          <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.4} toneMapped={false} />
-        </mesh>
-        <mesh ref={pupilR} position={[0.26, 0.072, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.14, 32]} />
-          <meshBasicMaterial color={COLORS.cyan} toneMapped={false} />
-        </mesh>
-        <mesh position={[0.31, 0.074, 0.03]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.04, 16]} />
-          <meshBasicMaterial color="#ffffff" toneMapped={false} />
-        </mesh>
-      </group>
+      {/* Brow panels above eyes — subtle shadow shape */}
+      <mesh position={[-0.36, 0.28, 0.92]} rotation={[0.1, 0, -0.1]}>
+        <boxGeometry args={[0.42, 0.06, 0.02]} />
+        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.4} roughness={0.4} />
+      </mesh>
+      <mesh position={[0.36, 0.28, 0.92]} rotation={[0.1, 0, 0.1]}>
+        <boxGeometry args={[0.42, 0.06, 0.02]} />
+        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.4} roughness={0.4} />
+      </mesh>
 
-      {/* ===== SIDE "EAR" — pink accent disc ===== */}
-      <group position={[-0.93, 0, 0]} rotation={[0, 0, 0]}>
+      {/* LEFT PINK EAR */}
+      <group position={[-1.02, 0, 0]}>
         <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
-          <cylinderGeometry args={[0.16, 0.16, 0.14, 32]} />
-          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.4} />
+          <cylinderGeometry args={[0.18, 0.18, 0.16, 32]} />
+          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.35} />
         </mesh>
-        {/* Pink inner */}
-        <mesh position={[-0.072, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.1, 0.1, 0.015, 32]} />
+        <mesh position={[-0.085, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.11, 0.11, 0.01, 32]} />
           <meshStandardMaterial
             color={COLORS.pink}
             emissive={COLORS.pink}
-            emissiveIntensity={0.3}
+            emissiveIntensity={0.5}
           />
         </mesh>
       </group>
 
-      <group position={[0.93, 0, 0]} rotation={[0, 0, 0]}>
+      {/* RIGHT EAR (darker / neutral) */}
+      <group position={[1.02, 0, 0]}>
         <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
-          <cylinderGeometry args={[0.16, 0.16, 0.14, 32]} />
-          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.4} />
+          <cylinderGeometry args={[0.18, 0.18, 0.16, 32]} />
+          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.35} />
         </mesh>
-        <mesh position={[0.072, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.1, 0.1, 0.015, 32]} />
-          <meshStandardMaterial
-            color={COLORS.pink}
-            emissive={COLORS.pink}
-            emissiveIntensity={0.3}
-          />
+        <mesh position={[0.085, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.11, 0.11, 0.01, 32]} />
+          <meshPhysicalMaterial color={COLORS.panel} metalness={0.7} roughness={0.25} />
         </mesh>
       </group>
 
-      {/* ===== ANTENNAS (two) ===== */}
-      {/* Left antenna */}
-      <group ref={antennaL} position={[-0.32, 0.72, 0]}>
+      {/* LEFT ANTENNA — yellow tip */}
+      <group ref={antennaL} position={[-0.3, 0.92, 0]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.025, 0.03, 0.5, 12]} />
-          <meshPhysicalMaterial color={COLORS.metallic} metalness={0.7} roughness={0.3} />
+          <cylinderGeometry args={[0.022, 0.028, 0.45, 12]} />
+          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.7} roughness={0.25} />
         </mesh>
-        <mesh ref={tipL} position={[0, 0.3, 0]} castShadow>
-          <sphereGeometry args={[0.08, 24, 24]} />
+        <mesh ref={tipL} position={[0, 0.28, 0]} castShadow>
+          <sphereGeometry args={[0.085, 24, 24]} />
           <meshStandardMaterial
             color={COLORS.yellow}
             emissive={COLORS.yellow}
@@ -184,21 +190,20 @@ function RobotHead() {
             toneMapped={false}
           />
         </mesh>
-        {/* Glow halo */}
-        <mesh position={[0, 0.3, 0]}>
+        <mesh position={[0, 0.28, 0]}>
           <sphereGeometry args={[0.13, 16, 16]} />
-          <meshBasicMaterial color={COLORS.yellow} transparent opacity={0.25} toneMapped={false} />
+          <meshBasicMaterial color={COLORS.yellow} transparent opacity={0.28} toneMapped={false} />
         </mesh>
       </group>
 
-      {/* Right antenna */}
-      <group ref={antennaR} position={[0.32, 0.72, 0]}>
+      {/* RIGHT ANTENNA — cyan tip */}
+      <group ref={antennaR} position={[0.3, 0.92, 0]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.025, 0.03, 0.5, 12]} />
-          <meshPhysicalMaterial color={COLORS.metallic} metalness={0.7} roughness={0.3} />
+          <cylinderGeometry args={[0.022, 0.028, 0.45, 12]} />
+          <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.7} roughness={0.25} />
         </mesh>
-        <mesh ref={tipR} position={[0, 0.3, 0]} castShadow>
-          <sphereGeometry args={[0.08, 24, 24]} />
+        <mesh ref={tipR} position={[0, 0.28, 0]} castShadow>
+          <sphereGeometry args={[0.085, 24, 24]} />
           <meshStandardMaterial
             color={COLORS.cyan}
             emissive={COLORS.cyan}
@@ -206,34 +211,11 @@ function RobotHead() {
             toneMapped={false}
           />
         </mesh>
-        <mesh position={[0, 0.3, 0]}>
+        <mesh position={[0, 0.28, 0]}>
           <sphereGeometry args={[0.13, 16, 16]} />
-          <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.25} toneMapped={false} />
+          <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.28} toneMapped={false} />
         </mesh>
       </group>
-
-      {/* Subtle panel seam on top */}
-      <mesh position={[0, 0.75, 0]}>
-        <torusGeometry args={[0.4, 0.01, 8, 32]} />
-        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.4} />
-      </mesh>
-    </group>
-  );
-}
-
-/* ---------- NECK ---------- */
-function Neck() {
-  return (
-    <group position={[0, 0.32, 0]}>
-      <mesh castShadow>
-        <cylinderGeometry args={[0.22, 0.25, 0.2, 24]} />
-        <meshPhysicalMaterial color={COLORS.joint} metalness={0.75} roughness={0.3} />
-      </mesh>
-      {/* Ring detail */}
-      <mesh>
-        <torusGeometry args={[0.23, 0.015, 8, 32]} />
-        <meshPhysicalMaterial color={COLORS.metallic} metalness={0.8} roughness={0.25} />
-      </mesh>
     </group>
   );
 }
@@ -244,145 +226,165 @@ function RobotBody() {
 
   useFrame((state) => {
     if (chest.current) {
-      const mat = chest.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 0.7 + Math.sin(state.clock.elapsedTime * 2.2) * 0.3;
+      const m = chest.current.material as THREE.MeshStandardMaterial;
+      m.emissiveIntensity = 0.8 + Math.sin(state.clock.elapsedTime * 2.5) * 0.4;
     }
   });
 
   return (
-    <group position={[0, -0.35, 0]}>
-      {/* Main torso */}
-      <RoundedBox args={[1.1, 1.15, 0.95]} radius={0.18} smoothness={4} castShadow receiveShadow>
+    <group position={[0, 0, 0]}>
+      {/* Neck joint */}
+      <mesh position={[0, 0.48, 0]} castShadow>
+        <cylinderGeometry args={[0.18, 0.22, 0.12, 20]} />
+        <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
+      </mesh>
+
+      {/* Torso — slightly wider at top, tapered */}
+      <RoundedBox
+        args={[1.15, 1.05, 0.95]}
+        radius={0.16}
+        smoothness={4}
+        position={[0, -0.08, 0]}
+        castShadow
+        receiveShadow
+      >
         <meshPhysicalMaterial
           color={COLORS.body}
-          metalness={0.45}
+          metalness={0.3}
           roughness={0.35}
-          clearcoat={0.9}
+          clearcoat={1}
           clearcoatRoughness={0.15}
         />
       </RoundedBox>
 
-      {/* Dark belt/waist */}
-      <RoundedBox args={[1.13, 0.15, 0.98]} radius={0.06} smoothness={3} position={[0, -0.55, 0]}>
-        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.35} />
+      {/* Top shoulder cap panel */}
+      <RoundedBox args={[1.2, 0.12, 0.98]} radius={0.05} smoothness={3} position={[0, 0.42, 0]}>
+        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.3} />
       </RoundedBox>
 
-      {/* Chest screen housing */}
-      <RoundedBox args={[0.55, 0.55, 0.06]} radius={0.08} smoothness={3} position={[0, 0.05, 0.48]}>
-        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.6} roughness={0.3} />
-      </RoundedBox>
+      {/* Chest screen inset — dark rectangle on the front */}
+      <mesh position={[0, 0, 0.48]}>
+        <boxGeometry args={[0.55, 0.42, 0.025]} />
+        <meshPhysicalMaterial color={COLORS.panel} metalness={0.7} roughness={0.2} clearcoat={1} />
+      </mesh>
 
-      {/* Chest screen — dark glass */}
-      <RoundedBox args={[0.45, 0.45, 0.04]} radius={0.06} smoothness={3} position={[0, 0.05, 0.515]}>
-        <meshPhysicalMaterial color="#0a0e1a" metalness={0.7} roughness={0.2} clearcoat={1} />
-      </RoundedBox>
+      {/* Cyan data lines inside screen */}
+      <mesh position={[-0.08, 0.1, 0.495]}>
+        <planeGeometry args={[0.3, 0.028]} />
+        <meshBasicMaterial color={COLORS.cyan} toneMapped={false} />
+      </mesh>
+      <mesh position={[-0.04, 0.01, 0.495]}>
+        <planeGeometry args={[0.36, 0.028]} />
+        <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.7} toneMapped={false} />
+      </mesh>
+      <mesh position={[-0.06, -0.08, 0.495]}>
+        <planeGeometry args={[0.32, 0.028]} />
+        <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.45} toneMapped={false} />
+      </mesh>
 
-      {/* Cyan glow data lines on chest screen */}
-      {[0.12, 0.04, -0.04, -0.12].map((y, i) => (
-        <mesh key={i} position={[-0.05, 0.05 + y, 0.54]}>
-          <planeGeometry args={[0.25, 0.02]} />
-          <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.7 - i * 0.12} toneMapped={false} />
-        </mesh>
-      ))}
-
-      {/* Central glowing chest core */}
-      <mesh ref={chest} position={[0, 0.05, 0.545]}>
-        <circleGeometry args={[0.05, 32]} />
+      {/* Cyan dot beside lines */}
+      <mesh ref={chest} position={[0.18, -0.08, 0.495]}>
+        <circleGeometry args={[0.04, 24]} />
         <meshStandardMaterial
           color={COLORS.cyan}
           emissive={COLORS.cyan}
-          emissiveIntensity={1}
+          emissiveIntensity={0.9}
           toneMapped={false}
         />
       </mesh>
 
-      {/* Side panel lines */}
-      <mesh position={[-0.56, 0, 0.2]}>
-        <boxGeometry args={[0.01, 0.8, 0.02]} />
-        <meshPhysicalMaterial color={COLORS.bodyDark} />
-      </mesh>
-      <mesh position={[0.56, 0, 0.2]}>
-        <boxGeometry args={[0.01, 0.8, 0.02]} />
-        <meshPhysicalMaterial color={COLORS.bodyDark} />
-      </mesh>
+      {/* Bottom waist panel */}
+      <RoundedBox args={[1.0, 0.15, 0.92]} radius={0.05} smoothness={3} position={[0, -0.55, 0]}>
+        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.3} />
+      </RoundedBox>
     </group>
   );
 }
 
-/* ---------- POINTING ARM (RIGHT) ---------- */
+/* ---------- RIGHT ARM — POINTING FINGER UP ---------- */
 function PointingArm() {
   const shoulder = useRef<THREE.Group>(null);
   const forearm = useRef<THREE.Group>(null);
+  const tipGlow = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     if (shoulder.current) {
-      // Shoulder raised upward, slight bounce
-      shoulder.current.rotation.z = -1.1 + Math.sin(t * 2.5) * 0.08;
-      shoulder.current.rotation.x = -0.2;
+      shoulder.current.rotation.z = -0.9 + Math.sin(t * 2.3) * 0.08;
     }
     if (forearm.current) {
-      // Forearm pointing up energetically
-      forearm.current.rotation.z = -1.2 + Math.sin(t * 2.5 + 0.3) * 0.05;
+      forearm.current.rotation.z = -1.4 + Math.sin(t * 2.3 + 0.3) * 0.05;
+    }
+    if (tipGlow.current) {
+      const m = tipGlow.current.material as THREE.MeshStandardMaterial;
+      m.emissiveIntensity = 1.1 + Math.sin(t * 4) * 0.5;
     }
   });
 
   return (
-    <group ref={shoulder} position={[0.58, -0.1, 0.1]}>
-      {/* Shoulder joint */}
+    <group ref={shoulder} position={[0.55, 0.18, 0.2]}>
+      {/* Shoulder ball joint */}
       <mesh castShadow>
-        <sphereGeometry args={[0.14, 24, 24]} />
+        <sphereGeometry args={[0.13, 20, 20]} />
         <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Upper arm */}
-      <mesh position={[0.24, 0, 0]} castShadow>
-        <capsuleGeometry args={[0.085, 0.32, 12, 24]} />
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+      <mesh position={[0.22, 0, 0]} castShadow>
+        <capsuleGeometry args={[0.09, 0.28, 12, 20]} />
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
       </mesh>
 
       {/* Elbow + forearm */}
-      <group ref={forearm} position={[0.46, 0, 0]}>
+      <group ref={forearm} position={[0.4, 0, 0]}>
         <mesh castShadow>
           <sphereGeometry args={[0.1, 20, 20]} />
           <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
         </mesh>
-
-        <mesh position={[0.18, 0, 0]} castShadow>
-          <capsuleGeometry args={[0.08, 0.26, 12, 24]} />
-          <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+        <mesh position={[0.17, 0, 0]} castShadow>
+          <capsuleGeometry args={[0.085, 0.24, 12, 20]} />
+          <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
         </mesh>
 
         {/* Wrist */}
-        <mesh position={[0.36, 0, 0]} castShadow>
-          <sphereGeometry args={[0.075, 16, 16]} />
+        <mesh position={[0.32, 0, 0]} castShadow>
+          <sphereGeometry args={[0.08, 16, 16]} />
           <meshPhysicalMaterial color={COLORS.joint} metalness={0.7} roughness={0.3} />
         </mesh>
 
-        {/* HAND (fist-like) */}
-        <group position={[0.46, 0, 0]}>
+        {/* Hand (fist) */}
+        <group position={[0.42, 0, 0]}>
           <mesh castShadow>
-            <sphereGeometry args={[0.11, 24, 24]} />
-            <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+            <sphereGeometry args={[0.12, 24, 24]} />
+            <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
           </mesh>
-          {/* Pointing INDEX FINGER */}
-          <mesh position={[0.14, 0.02, 0]} rotation={[0, 0, -Math.PI / 2]} castShadow>
-            <capsuleGeometry args={[0.04, 0.14, 8, 16]} />
-            <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+
+          {/* Pointing index finger */}
+          <mesh position={[0.09, 0.02, 0]} rotation={[0, 0, -Math.PI / 2]} castShadow>
+            <capsuleGeometry args={[0.032, 0.12, 8, 16]} />
+            <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
           </mesh>
-          {/* Fingertip glow */}
-          <mesh position={[0.14, 0.11, 0]}>
-            <sphereGeometry args={[0.045, 16, 16]} />
+
+          {/* Fingertip joint */}
+          <mesh position={[0.09, 0.11, 0]}>
+            <sphereGeometry args={[0.04, 16, 16]} />
+            <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.3} />
+          </mesh>
+
+          {/* Glowing fingertip cap */}
+          <mesh ref={tipGlow} position={[0.09, 0.145, 0]}>
+            <sphereGeometry args={[0.035, 16, 16]} />
             <meshStandardMaterial
               color={COLORS.cyan}
               emissive={COLORS.cyan}
-              emissiveIntensity={0.8}
+              emissiveIntensity={1.2}
               toneMapped={false}
             />
           </mesh>
-          <mesh position={[0.14, 0.11, 0]}>
-            <sphereGeometry args={[0.065, 16, 16]} />
-            <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.3} toneMapped={false} />
+          {/* Glow aura */}
+          <mesh position={[0.09, 0.145, 0]}>
+            <sphereGeometry args={[0.07, 12, 12]} />
+            <meshBasicMaterial color={COLORS.cyan} transparent opacity={0.35} toneMapped={false} />
           </mesh>
         </group>
       </group>
@@ -390,58 +392,59 @@ function PointingArm() {
   );
 }
 
-/* ---------- RELAXED ARM (LEFT) ---------- */
+/* ---------- LEFT ARM — RELAXED ---------- */
 function RelaxedArm() {
   const shoulder = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     if (shoulder.current) {
-      shoulder.current.rotation.z = 0.15 + Math.sin(t * 1.5) * 0.05;
+      shoulder.current.rotation.z = 0.15 + Math.sin(t * 1.5) * 0.04;
     }
   });
 
   return (
-    <group ref={shoulder} position={[-0.58, -0.1, 0.1]}>
+    <group ref={shoulder} position={[-0.55, 0.18, 0.2]}>
+      {/* Shoulder */}
       <mesh castShadow>
-        <sphereGeometry args={[0.14, 24, 24]} />
+        <sphereGeometry args={[0.13, 20, 20]} />
         <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
       </mesh>
 
-      {/* Upper arm — down */}
-      <mesh position={[-0.02, -0.3, 0]} rotation={[0, 0, -0.1]} castShadow>
-        <capsuleGeometry args={[0.085, 0.32, 12, 24]} />
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+      {/* Upper arm down */}
+      <mesh position={[-0.02, -0.25, 0]} rotation={[0, 0, -0.1]} castShadow>
+        <capsuleGeometry args={[0.09, 0.28, 12, 20]} />
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
       </mesh>
 
       {/* Elbow */}
-      <mesh position={[-0.06, -0.52, 0]} castShadow>
+      <mesh position={[-0.05, -0.44, 0]} castShadow>
         <sphereGeometry args={[0.1, 20, 20]} />
         <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Forearm */}
-      <mesh position={[-0.08, -0.72, 0]} rotation={[0, 0, -0.05]} castShadow>
-        <capsuleGeometry args={[0.08, 0.26, 12, 24]} />
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+      <mesh position={[-0.07, -0.62, 0]} rotation={[0, 0, -0.05]} castShadow>
+        <capsuleGeometry args={[0.085, 0.24, 12, 20]} />
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
       </mesh>
 
       {/* Wrist + hand */}
-      <mesh position={[-0.1, -0.9, 0]} castShadow>
-        <sphereGeometry args={[0.075, 16, 16]} />
+      <mesh position={[-0.08, -0.78, 0]} castShadow>
+        <sphereGeometry args={[0.08, 16, 16]} />
         <meshPhysicalMaterial color={COLORS.joint} metalness={0.7} roughness={0.3} />
       </mesh>
-      <mesh position={[-0.11, -1.02, 0]} castShadow>
+      <mesh position={[-0.09, -0.9, 0]} castShadow>
         <sphereGeometry args={[0.12, 24, 24]} />
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
       </mesh>
-      {/* Hand cyan accent ring */}
-      <mesh position={[-0.11, -1.02, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.11, 0.012, 8, 24]} />
+      {/* Cyan glow accent on palm */}
+      <mesh position={[-0.09, -0.9, 0.1]}>
+        <circleGeometry args={[0.05, 24]} />
         <meshStandardMaterial
           color={COLORS.cyan}
           emissive={COLORS.cyan}
-          emissiveIntensity={0.6}
+          emissiveIntensity={0.9}
           toneMapped={false}
         />
       </mesh>
@@ -452,43 +455,54 @@ function RelaxedArm() {
 /* ---------- LEG ---------- */
 function RobotLeg({ x = 0 }: { x?: number }) {
   return (
-    <group position={[x, -1.15, 0]}>
-      {/* Hip joint */}
+    <group position={[x, -0.72, 0]}>
+      {/* Hip */}
       <mesh castShadow>
         <sphereGeometry args={[0.13, 20, 20]} />
         <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Thigh */}
-      <mesh position={[0, -0.2, 0]} castShadow>
-        <capsuleGeometry args={[0.11, 0.26, 12, 24]} />
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+      <mesh position={[0, -0.18, 0]} castShadow>
+        <capsuleGeometry args={[0.12, 0.22, 12, 20]} />
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
       </mesh>
 
       {/* Knee */}
-      <mesh position={[0, -0.42, 0]} castShadow>
-        <sphereGeometry args={[0.11, 20, 20]} />
+      <mesh position={[0, -0.38, 0]} castShadow>
+        <sphereGeometry args={[0.12, 20, 20]} />
         <meshPhysicalMaterial color={COLORS.joint} metalness={0.8} roughness={0.3} />
       </mesh>
 
       {/* Shin */}
-      <mesh position={[0, -0.6, 0]} castShadow>
-        <capsuleGeometry args={[0.1, 0.2, 12, 24]} />
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.45} roughness={0.35} clearcoat={0.8} />
+      <mesh position={[0, -0.55, 0]} castShadow>
+        <capsuleGeometry args={[0.1, 0.18, 12, 20]} />
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.3} roughness={0.35} clearcoat={0.9} />
       </mesh>
 
-      {/* Foot (boot) */}
-      <RoundedBox args={[0.32, 0.18, 0.38]} radius={0.08} smoothness={4} position={[0, -0.8, 0.06]} castShadow>
-        <meshPhysicalMaterial color={COLORS.body} metalness={0.5} roughness={0.3} clearcoat={0.9} />
+      {/* Boot — chunky foot */}
+      <RoundedBox
+        args={[0.36, 0.2, 0.44]}
+        radius={0.1}
+        smoothness={4}
+        position={[0, -0.78, 0.06]}
+        castShadow
+      >
+        <meshPhysicalMaterial color={COLORS.body} metalness={0.35} roughness={0.3} clearcoat={1} />
       </RoundedBox>
 
-      {/* Cyan strip on foot */}
-      <mesh position={[0, -0.73, 0.18]}>
-        <boxGeometry args={[0.32, 0.012, 0.02]} />
+      {/* Boot top panel */}
+      <RoundedBox args={[0.38, 0.07, 0.46]} radius={0.04} smoothness={3} position={[0, -0.68, 0.07]}>
+        <meshPhysicalMaterial color={COLORS.bodyDark} metalness={0.5} roughness={0.3} />
+      </RoundedBox>
+
+      {/* Glowing cyan strip on foot front */}
+      <mesh position={[0, -0.78, 0.29]}>
+        <boxGeometry args={[0.24, 0.018, 0.003]} />
         <meshStandardMaterial
           color={COLORS.cyan}
           emissive={COLORS.cyan}
-          emissiveIntensity={0.7}
+          emissiveIntensity={0.9}
           toneMapped={false}
         />
       </mesh>
@@ -503,21 +517,18 @@ function Robot() {
   useFrame((state) => {
     if (group.current) {
       const t = state.clock.elapsedTime;
-      // Subtle idle breathing
       group.current.rotation.y = Math.sin(t * 0.5) * 0.06;
-      group.current.position.y = Math.sin(t * 1.8) * 0.03;
     }
   });
 
   return (
-    <group ref={group} position={[0, 0.1, 0]} scale={0.85}>
+    <group ref={group} position={[0, 0.15, 0]} scale={0.85}>
       <RobotHead />
-      <Neck />
       <RobotBody />
       <PointingArm />
       <RelaxedArm />
-      <RobotLeg x={-0.28} />
-      <RobotLeg x={0.28} />
+      <RobotLeg x={-0.3} />
+      <RobotLeg x={0.3} />
     </group>
   );
 }
@@ -526,34 +537,31 @@ function Robot() {
 function Scene() {
   return (
     <>
-      {/* Lighting setup */}
-      <ambientLight intensity={0.5} />
+      {/* Bright, friendly lighting */}
+      <ambientLight intensity={0.7} />
       <directionalLight
-        position={[4, 6, 5]}
-        intensity={1.1}
+        position={[3, 6, 4]}
+        intensity={1.2}
         color="#ffffff"
         castShadow
         shadow-mapSize={[1024, 1024]}
       />
-      <directionalLight position={[-4, 3, 3]} intensity={0.55} color="#9bb3ff" />
+      <directionalLight position={[-4, 3, 2]} intensity={0.6} color="#b4b8ff" />
       <pointLight position={[-2, 1, 4]} intensity={0.55} color={COLORS.cyan} />
-      <pointLight position={[3, 0, 3]} intensity={0.4} color={COLORS.pink} />
-      {/* Rim light */}
-      <directionalLight position={[0, 3, -5]} intensity={0.45} color="#6a7fc1" />
+      <pointLight position={[3, 1, 3]} intensity={0.4} color={COLORS.pink} />
+      <directionalLight position={[0, 2, -4]} intensity={0.4} color="#a8b4ff" />
 
-      {/* Subtle float */}
-      <Float speed={2} rotationIntensity={0.08} floatIntensity={0.3}>
+      <Float speed={1.8} rotationIntensity={0.08} floatIntensity={0.3}>
         <Robot />
       </Float>
 
-      {/* Ground shadow */}
       <ContactShadows
-        position={[0, -2.05, 0]}
+        position={[0, -1.8, 0]}
         opacity={0.55}
         scale={5}
-        blur={2.2}
+        blur={2.4}
         far={3}
-        color="#0a0d1f"
+        color="#1a1e3a"
       />
     </>
   );
@@ -564,7 +572,7 @@ export default function HeroModel() {
   return (
     <div className="w-full h-full min-h-[400px]">
       <Canvas
-        camera={{ position: [0, 0.2, 5.4], fov: 38 }}
+        camera={{ position: [0, 0.4, 5.3], fov: 38 }}
         dpr={[1, 2]}
         shadows
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
